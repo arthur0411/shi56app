@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopContentMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopContent" >
+	<result column="content_id" property="contentId"/>
+	<result column="content" property="content"/>
+	<result column="user_id" property="userId"/>
+	<result column="commodity_id" property="commodityId"/>
+	<result column="create_time" property="createTime"/>
+	<result column="content_img" property="contentImg"/>
+</resultMap>
+       
+<!-- shop_content table all fields -->
+<sql id="Base_Column_List" >
+	 content_id,content,user_id,commodity_id,create_time,content_img
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.contentId != null and condition.contentId != ''" >
+	    and content_id =  #{condition.contentId}
+	</if>
+	<if test="condition.content != null and condition.content != ''" >
+	    and content =  #{condition.content}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.commodityId != null and condition.commodityId != ''" >
+	    and commodity_id =  #{condition.commodityId}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.contentImg != null and condition.contentImg != ''" >
+	    and content_img =  #{condition.contentImg}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_content(content_id,content,user_id,commodity_id,create_time,content_img)
+ values(#{contentId},#{content},#{userId},#{commodityId},now(),#{contentImg})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_content set content=#{content},user_id=#{userId},commodity_id=#{commodityId},create_time=now(),content_img=#{contentImg} where content_id=#{contentId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_content set 
+	<trim  suffixOverrides="," >
+	<if test="content != null  ">
+		content=#{content},
+	</if>
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="commodityId != null  ">
+		commodity_id=#{commodityId},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="contentImg != null  ">
+		content_img=#{contentImg},
+	</if>
+	</trim> where content_id=#{contentId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_content where content_id = #{contentId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_content where content_id = #{contentId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_content 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_content 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

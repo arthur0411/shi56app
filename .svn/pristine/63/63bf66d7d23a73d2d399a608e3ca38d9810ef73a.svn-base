@@ -1,0 +1,425 @@
+package com.flf.controller.app;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.alipay.util.AlipayUtil;
+import com.flf.entity.ShopOrder;
+import com.flf.entity.ShopOrderPayment;
+import com.flf.entity.ShopRecharge;
+import com.flf.entity.ShopUser;
+import com.flf.service.ShopOrderPaymentService;
+import com.flf.service.ShopOrderService;
+import com.flf.service.ShopRechargeService;
+import com.flf.service.ShopUserService;
+import com.flf.util.HajRechargeUtil;
+import com.flf.util.JSONUtils;
+import com.flf.util.MakeOrderNum;
+import com.flf.util.Tools;
+import com.flf.util.XMLBeanUtils;
+import com.weixin.PayUtil;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopRechargeController<br>
+ * <br>
+ */
+@Controller
+@RequestMapping(value = "/shopRecharge")
+public class ShopRechargeAppController {
+
+	private final static Logger log = Logger.getLogger(ShopRechargeAppController.class);
+	@Autowired(required = false)
+	private ShopRechargeService shopRechargeService;
+
+	@Autowired(required = false)
+	private ShopOrderPaymentService shopOrderPaymentService;
+
+	@Autowired(required = false)
+	private ShopOrderService orderService;
+
+	@Autowired(required = false)
+	private ShopUserService shopUserService;
+
+	
+	public static void main(String[] args) {
+		System.out.println(BigDecimal.valueOf(2).compareTo(BigDecimal.valueOf(1)) > 1);
+	}
+
+	/**
+	 * 确认充值接口，第三方支付平台预支付接口
+	 */
+	@RequestMapping(value = "/saveHajRecharge")
+	public void saveHajRecharge(@ModelAttribute ShopRecharge recharge, HttpServletResponse response) {
+		log.info("确认充值、第三方支付平台预支付接口");
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		boolean insertFlag = true;
+		try {
+			if (recharge.getMoney().compareTo(BigDecimal.valueOf(0)) > 0) {
+				if (null != recharge.getUserId() && recharge.getUserId() > 0 && recharge.getRechargeFor() != null) {
+
+					// 订单或配送费支付前判断支付状态，如果已支付，则返回错误提示
+					if (recharge.getPaymentTarget() != null) {
+						if (recharge.getRechargeFor() == HajRechargeUtil.ORDER_PAYMENT) {
+							ShopOrder orderByOrderNo = orderService.getOrderByOrderNo(recharge.getPaymentTarget());
+							insertFlag = (orderByOrderNo != null && orderByOrderNo.getIsPayment().equals("no"));
+						} else if (recharge.getRechargeFor() == HajRechargeUtil.ANNUAL_FEE) {
+							ShopUser user = shopUserService.queryById(recharge.getUserId());
+							insertFlag = (user != null && user.getUserVip() == 0);
+						}
+					}
+
+					if (insertFlag) {
+						if (recharge.getRechargeType() == 1) {// 微信支付，需要调用接口预支付
+							Map<String, Object> objMap = PayUtil.addWeixinOrder(recharge);
+							if (null != objMap) {
+								recharge.setPrepayId(objMap.get("prepay_id").toString());
+								recharge.setBankNo(objMap.get("out_trade_no").toString());
+
+								jsonMap.put("prepay_id", objMap.get("prepay_id").toString());
+								jsonMap.put("nonceStr", objMap.get("nonceStr").toString());
+							}
+
+							// 微信默认单位是分，因此APP传过来的是分，我们需要处理成元再存入数据库
+							recharge.setMoney(recharge.getMoney().divide(PayUtil.ONE_HUNDRED, 2,
+									BigDecimal.ROUND_HALF_UP));
+						} else {// 支付宝支付
+							String orderNo = MakeOrderNum.makeRechargeNum();
+							recharge.setBankNo(orderNo);
+							recharge.setPrepayId(orderNo);
+							jsonMap.put("prepay_id", orderNo);
+						}
+
+						// 这一步通知状态必须为1，调用通知接口成功才设为0
+						recharge.setNotifyStatus(1);
+
+						// 默认为0
+						recharge.setRechargeStatus(0);
+						recharge.setRefundNum(BigDecimal.ZERO);
+						recharge.setIsRefund("0");
+						shopRechargeService.add(recharge);
+ 						
+						jsonMap.put("error", "0");
+						jsonMap.put("msg", "成功");
+					} else {
+						jsonMap.put("error", "3");
+						jsonMap.put("msg", "请勿重复支付");
+					}
+				} else {
+					jsonMap.put("error", "0");
+					jsonMap.put("msg", "为空");
+				}
+			} else {
+				jsonMap.put("error", "1");
+				jsonMap.put("msg", "未知异常");
+			}
+		} catch (Exception e) {
+			jsonMap.put("error", "1");
+			jsonMap.put("msg", "未知异常");
+			e.printStackTrace();
+		} finally {
+			try {
+				jsonMap.put("recharge", recharge);
+				JSONUtils.printObject(jsonMap, response);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 微信回调地址 notify_url
+	 * <p>
+	 * <br>
+	 * author SevenWong <br>
+	 * date 2016年6月13日上午10:21:50
+	 */
+	@RequestMapping(value = "/shopRechargeNotify")
+	public void shopRechargeNotify(HttpServletRequest request, HttpServletResponse response) {
+		log.info("shopRechargeNotify()进入微信回调地址");
+		String return_code = "SUCCESS";
+		String return_msg = "OK";
+
+		String inputLine;
+		StringBuilder notifyXml = new StringBuilder();
+
+		try {
+
+			while ((inputLine = request.getReader().readLine()) != null) {
+				notifyXml.append(inputLine);
+			}
+			request.getReader().close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		log.info("微信回调时请求过来的xml数据：\n" + notifyXml);
+		String out_trade_no = XMLBeanUtils.getXmlNodeValue(notifyXml.toString(), "out_trade_no");
+
+		// 获取out_trade_no（bankNo），根据out_trade_no返回该条记录
+		ShopRecharge shopRecharge = shopRechargeService.getByOutTradeNo(out_trade_no);
+		if (shopRecharge != null && null != shopRecharge.getRechargeStatus() && shopRecharge.getRechargeStatus() == 0) {
+			updateRecordByRechargeFor(shopRecharge);
+		} else if (shopRecharge != null && null != shopRecharge.getRechargeStatus()
+				&& shopRecharge.getRechargeStatus() == 1) {
+			return_code = "SUCCESS";
+			return_msg = "OK";
+		} else {
+			return_code = "FAIL";
+			return_msg = "未找到该订单";
+		}
+
+		String xmlData = "<xml><return_code><![CDATA[" + return_code + "]]></return_code>" + //
+				"<return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
+		response.setContentType("text/xml; charset=UTF-8");
+		try {
+			response.getWriter().write(xmlData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 根据第三方支付的类型，修改的对应表的记录
+	 * <p>
+	 * 以前充值的逻辑不变，新增配送费与订单付款的处理
+	 * </p>
+	 */
+	private void updateRecordByRechargeFor(ShopRecharge shopRecharge) {
+
+		try {
+			int updateStatus = shopRechargeService.updateHajRecharge(shopRecharge.getPrepayId(),
+					shopRecharge.getAlipayTradeNo());
+
+			if (updateStatus > 0) {
+				if (shopRecharge.getRechargeFor() == HajRechargeUtil.RECHARGE) {
+					log.info("更新充值记录和流水用户金额");
+					shopRechargeService.updateUserRechargeRecord(shopRecharge.getPrepayId(),
+							String.valueOf(shopRecharge.getRechargeFor()), shopRecharge.getAlipayTradeNo());
+				} else if (shopRecharge.getRechargeFor() == HajRechargeUtil.ANNUAL_FEE) {
+					log.info("押金");
+					shopRechargeService.updateDeposit(shopRecharge.getPrepayId(),
+							String.valueOf(shopRecharge.getRechargeFor()), shopRecharge.getPaymentTarget());
+				} else if (shopRecharge.getRechargeFor() == HajRechargeUtil.ORDER_PAYMENT) {
+					log.info("正常支付");
+					log.info("订单支付表记录此次支付流水");
+					// 此次支付为订单付款时，先写入订单支付表，记录此次支付流水
+					ShopOrderPayment hajOrderPayment = new ShopOrderPayment();
+					hajOrderPayment.setOrderNo(shopRecharge.getPaymentTarget());
+					hajOrderPayment.setRechargeId(shopRecharge.getId());
+
+					// 检查唯一性
+					int count = shopOrderPaymentService.getCount(hajOrderPayment);
+					if (count == 0) {
+						try {
+							shopOrderPaymentService.add(hajOrderPayment);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					log.info("修改订单的支付状态");
+					orderService.updateOrderPayStatus(shopRecharge.getPaymentTarget(), shopRecharge.getRechargeType());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 支付宝异步通知地址
+	 * <p>
+	 * <br>
+	 * author SevenWong<br>
+	 * <br>
+	 * date 2016年7月2日上午10:56:12
+	 */
+	@RequestMapping("/alipayNotify")
+	public void alipayNotify(HttpServletRequest request, PrintWriter out) {
+		log.info("进入支付宝异步通知地址...");
+
+		Map<String, String> result = getPostQueryString(request.getParameterMap());
+		String tradeStatus = result.get("trade_status");
+		String tradeNo = result.get("trade_no");
+
+		if ("TRADE_SUCCESS".equals(tradeStatus) || "TRADE_FINISHED".equals(tradeStatus)) {
+			// 获取out_trade_no（bankNo），根据out_trade_no返回该条记录
+			String out_trade_no = request.getParameter("out_trade_no");
+
+			ShopRecharge shopRecharge = shopRechargeService.getByOutTradeNo(out_trade_no);
+			if (shopRecharge != null && null != shopRecharge.getRechargeStatus()
+					&& shopRecharge.getRechargeStatus() == 0) {
+				log.info("支付成功，更新用户余额及支付状态");
+
+				shopRecharge.setAlipayTradeNo(tradeNo);
+
+				// 同时更新支付宝源交易号到充值表，退款用
+				ShopRecharge shopRechargeUpdate = new ShopRecharge();
+				shopRechargeUpdate.setId(shopRecharge.getId());
+				shopRechargeUpdate.setAlipayTradeNo(tradeNo);
+				shopRechargeService.updateBySelective(shopRechargeUpdate);
+
+				updateRecordByRechargeFor(shopRecharge);
+			} else if (shopRecharge != null && null != shopRecharge.getRechargeStatus()
+					&& shopRecharge.getRechargeStatus() == 1) {
+				log.info("支付已成功或未找到该订单，无需更新，并告诉支付宝停止发通知");
+			}
+			// 输出success告诉支付宝不用再回调，否则支付宝会在24小时内回调8次
+			out.print("success");
+		} else {
+			log.info("支付宝：交易尚未完成tradeStatus:" + tradeStatus);
+		}
+	}
+
+	/**
+	 * 获取支付宝异步通知时请求过来的参数（post），返回交易状态
+	 * <p>
+	 * <br>
+	 * author SevenWong<br>
+	 * <br>
+	 * date 2016年7月4日下午2:26:48
+	 */
+	private Map<String, String> getPostQueryString(Map<String, String[]> params) {
+		Map<String, String> result = new HashMap<String, String>();
+		String[] values;
+		String value;
+		String trade_status = "";
+		String notify_id = "";
+		String trade_no = "";
+		for (String key : params.keySet()) {
+			values = params.get(key);
+			for (String val : values) {
+				value = val;
+				if ("trade_status".equals(key)) {
+					trade_status = value;
+				}
+				if ("notify_id".equals(key)) {
+					notify_id = value;
+				}
+				if ("trade_no".equals(key)) {
+					trade_no = value;
+				}
+			}
+		}
+
+		// 支付宝异步通知时验证此通知是否由支付宝发起
+		if (!"true".equals(AlipayUtil.notifyVerify(notify_id))) {
+			trade_status = "";
+			log.warn("警告！此通知非支付宝发起，或支付状态已过期");
+		}
+
+		result.put("trade_status", trade_status);
+		result.put("trade_no", trade_no);
+
+		return result;
+	}
+
+	/**
+	 * 获取充值订单支付状态，msg = invalid时表示订单已失效，APP无需提示是否成功
+	 * <p>
+	 * <br>
+	 * author SevenWong<br>
+	 * <br>
+	 * date 2016年6月13日下午4:18:47
+	 */
+	@RequestMapping(value = "/getRechargeStatus")
+	public void getRechargeStatus(@RequestParam String out_trade_no, HttpServletResponse response) {
+		Map<String, Object> jsonMap = new HashMap<>();
+		try {
+			ShopRecharge hajRecharge = shopRechargeService.getByOutTradeNo(out_trade_no);
+			if (hajRecharge != null) {
+				if (hajRecharge.getNotifyStatus() != null && hajRecharge.getNotifyStatus() == 1) {
+
+					// 订单支付状态，判断是否支付成功
+					boolean tradeStatus = false;
+					if (hajRecharge.getRechargeStatus() != null && hajRecharge.getRechargeStatus() == 1) {
+						tradeStatus = true;
+						log.info("getRechargeStatus()充值订单支付成功...");
+					} else {
+						// 数据库查询到未充值成功时，主动请求支付查询订单接口去判断支付状态，看是不是有由于网络原因未接收到回调
+						if (hajRecharge.getRechargeType() == 1) {
+							log.info("getRechargeStatus()调用微信查询订单状态接口...");
+							tradeStatus = wechatTradeQuery(hajRecharge.getBankNo());
+						} else if (hajRecharge.getRechargeType() == 2) {
+							log.info("getRechargeStatus()调用支付宝查询订单状态接口...");
+							String alipayTradeNo = AlipayUtil.alipayTradeStatus(hajRecharge.getBankNo());
+							if (tradeStatus = Tools.isNotEmpty(alipayTradeNo)) {
+								hajRecharge.setAlipayTradeNo(alipayTradeNo);
+							}
+						}
+					}
+
+					if (tradeStatus) {
+						jsonMap.put("error", "0");
+						jsonMap.put("msg", "充值成功");
+
+						// 成功后将notifyStatus设为0，APP下次再请求此接口就可以告诉它此次充值已完成（返回invalid），无需再请求
+						ShopRecharge hajRechargeUpdate = new ShopRecharge();
+						hajRechargeUpdate.setId(hajRecharge.getId());
+						hajRechargeUpdate.setNotifyStatus(0);
+
+						// 同时更新支付宝源交易号到充值表，退款用
+						hajRechargeUpdate.setAlipayTradeNo(hajRecharge.getAlipayTradeNo());
+						shopRechargeService.updateBySelective(hajRechargeUpdate);
+
+						updateRecordByRechargeFor(hajRecharge);
+
+					} else {
+						jsonMap.put("error", "5");
+						jsonMap.put("msg", "充值失败或未支付");
+					}
+				} else {
+					jsonMap.put("error", "4");
+					jsonMap.put("msg", "invalid");
+				}
+			} else {
+				jsonMap.put("error", "3");
+				jsonMap.put("msg", "没找到该流水");
+			}
+
+		} catch (Exception e) {
+			jsonMap.put("error", "1");
+			jsonMap.put("msg", "未知异常");
+		} finally {
+			try {
+				JSONUtils.printObject(jsonMap, response);
+				log.info("返回给APP的充值状态msg:" + jsonMap.get("msg"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 调用微信订单查询接口判断该订单是否已完成支付
+	 * <p>
+	 * <br>
+	 * author SevenWong <br>
+	 * date 2016年7月5日上午11:31:13
+	 */
+	private boolean wechatTradeQuery(String orderNo) {
+		Map<String, Object> returnMap = PayUtil.payQuery(orderNo);
+		if (returnMap != null && "SUCCESS".equals(returnMap.get("result_code"))) {
+			if ("SUCCESS".equals(returnMap.get("trade_state"))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+}

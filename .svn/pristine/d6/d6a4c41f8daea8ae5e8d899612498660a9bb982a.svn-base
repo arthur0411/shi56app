@@ -1,0 +1,67 @@
+package com.flf.controller;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.flf.entity.ShopIdle;
+import com.flf.service.ShopIdleService;
+import com.flf.util.JSONUtils;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopIdleController<br>
+ * <br>
+ */
+@Controller
+@RequestMapping(value = "/idle")
+public class ShopIdleController {
+
+	private final static Logger log = Logger.getLogger(ShopIdleController.class);
+	@Autowired(required = false)
+	private ShopIdleService shopIdleService;
+
+	@RequestMapping(value = "/list")
+	public ModelAndView list(ShopIdle vo, HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+
+		List<ShopIdle> promotionAreaList = shopIdleService.listPage(vo);
+
+		mv.addObject("vo", vo);
+		mv.addObject("shopIdleList", promotionAreaList);
+		mv.setViewName("shopIdleList");
+
+		return mv;
+	}
+
+	@RequestMapping(value = "/auditStatusSuccess")
+	public void auditStatusSuccess(@RequestParam Integer id, int status, HttpServletResponse httpServletResponse,
+			HttpServletResponse response) {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			shopIdleService.updateAuditStatus(id, status);
+			jsonMap.put("error", "1");
+			jsonMap.put("msg", "操作成功！");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				JSONUtils.printObject(jsonMap, response);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

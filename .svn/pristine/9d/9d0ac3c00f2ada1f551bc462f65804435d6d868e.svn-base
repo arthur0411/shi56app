@@ -1,0 +1,51 @@
+package com.flf.controller.app;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.flf.service.ShopStockService;
+import com.flf.util.JSONUtils;
+
+
+/**
+ * @author Arthur
+ *
+ */
+@Controller
+@RequestMapping(value="/stockapp")
+public class ShopStockAppController {
+
+	private final static Logger log = Logger.getLogger(ShopStockAppController.class);
+	
+	@Autowired
+	private ShopStockService service;
+	
+	/**
+	 * @param id
+	 * @param response
+	 */
+	@RequestMapping(value = "/getStock")
+	public void getStock(String id ,HttpServletResponse response){
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		try {
+			jsonMap.put("stock",service.queryStockById(id));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				JSONUtils.printObject(jsonMap, response);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+}

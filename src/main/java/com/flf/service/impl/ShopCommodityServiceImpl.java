@@ -1,0 +1,124 @@
+package com.flf.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.base.criteria.Criteria;
+import com.base.service.BaseServiceImpl;
+import com.flf.entity.ShopCommodity;
+import com.flf.entity.ShopOrderDetails;
+import com.flf.mapper.ShopCommodityMapper;
+import com.flf.service.ShopCommodityService;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopCommodityService<br>
+ */
+@Service("shopCommodityService")
+public class ShopCommodityServiceImpl extends BaseServiceImpl implements ShopCommodityService {
+	private final static Logger log = Logger.getLogger(ShopCommodityServiceImpl.class);
+
+	@Autowired
+	private ShopCommodityMapper dao;
+
+	@Override
+	public ShopCommodityMapper getDao() {
+		return dao;
+	}
+
+	@Override
+	public List<Map<String, Object>> getCommodityIndex(Criteria criteria) {
+		return dao.getCommodityIndex(criteria);
+	}
+
+	@Override
+	public List<Map<String, Object>> getRecommendCommodity(Criteria criteria) {
+		return dao.getRecommendCommodity(criteria);
+	}
+
+	@Override
+	public List<Map<String, Object>> getCommodityByTagId(Criteria criteria) {
+		return dao.getCommodityByTagId(criteria);
+	}
+
+	@Override
+	public List<Map<String, Object>> listPage(ShopCommodity vo) {
+		return dao.listPage(vo);
+	}
+
+	@Override
+	public ShopCommodity getCommodityById(Integer id) {
+		return dao.getCommodityById(id);
+	}
+
+	@Override
+	public List<Map<String, Object>> getSearchCommodity(Criteria criteria) {
+		return dao.getSearchCommodity(criteria);
+	}
+
+	@Override
+	public int updateInventoryReduce(ShopOrderDetails details) {
+		return dao.updateInventoryReduce(details);
+	}
+
+	@Override
+	public int updateRentInventoryReduce(ShopOrderDetails details) {
+		return dao.updateRentInventoryReduce(details);
+	}
+	
+	@Override
+	public void updateSoldOut(Integer commodityId) {
+		dao.updateSoldOut(commodityId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getBrandTopicCommodity(Criteria criteria) {
+		return dao.getBrandTopicCommodity(criteria);
+	}
+
+	@Override
+	public List<Map<String, Object>> getSaleStockById(String[] commodityId) {
+		return dao.getSaleStockById(commodityId);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getRentStockById(String[] commodityId) {
+		return dao.getRentStockById(commodityId);
+	}
+
+	@Override
+	public void updateStock(Integer commodityId, Integer num) {
+		dao.updateStock(commodityId, num);
+	}
+
+	@Override
+	public List<ShopCommodity> listcart() {
+		return dao.listcart();
+	}
+
+	@Override
+	public String getRentStock(Object commodityId) {
+		return dao.getRentStock(commodityId);
+	}
+
+	@Override
+	public void deletePic(String picName) {
+		dao.deletePic(picName);
+	}
+
+	@Override
+	public void changeBrand(String brandId, String brandName) {
+		dao.changeBrand(brandId, brandName);
+	}
+
+	@Override
+	public void guaHui(Integer price) {
+		dao.guaHui(price);
+	}
+
+}

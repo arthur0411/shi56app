@@ -1,0 +1,301 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>订单列表</title>
+<jsp:include page="common/public_js_css.jsp" flush="true"/>
+<script type="text/javascript" src="../../style/js/echo-area-and-type.js"></script>
+<script type="text/javascript" src="../../style/js/global.js"></script>
+</head>
+<body style="background-color: #FFFFFF;">
+	<div class="mainBox">
+		<h3>订单列表</h3>
+		<form action="/shopOrder/list.html" method="post" name="userForm" id="userForm">
+			<div class="filter" >
+
+				订单状态：
+				<select name="orderStatus" id="orderStatus" style="vertical-align: middle;">
+					<option value="0" <c:if test="${order.orderStatus==0}">selected</c:if>>不限</option>
+					<option value="1" <c:if test="${order.orderStatus==1}">selected</c:if>>确认中</option>
+					<option value="2" <c:if test="${order.orderStatus==2}">selected</c:if>>配送中</option>
+					<option value="3" <c:if test="${order.orderStatus==3}">selected</c:if>>佩戴中</option>
+					<option value="4" <c:if test="${order.orderStatus==4}">selected</c:if>>返回中</option>
+					<option value="5" <c:if test="${order.orderStatus==5}">selected</c:if>>验收中</option>
+					<option value="6" <c:if test="${order.orderStatus==6}">selected</c:if>>违规处理</option>
+					<option value="7" <c:if test="${order.orderStatus==7}">selected</c:if>>验收完成</option>
+					<option value="8" <c:if test="${order.orderStatus==6}">selected</c:if>>已取消</option>
+				</select>
+				
+				订单种类：
+				<select name="orderClass" id="orderClass" style="vertical-align: middle;">
+					<option value="" >不限</option>
+					<option value="1" <c:if test="${order.orderClass == 1}">selected</c:if>>试戴</option>
+					<option value="2" <c:if test="${order.orderClass == 2}">selected</c:if>>售卖</option>
+					
+				</select>
+				
+			</div>
+				
+			<div class="filter" >
+				下单日期范围：
+				<input type="button" class="btnGray" id="btn_today" value="今日" />
+				<input type="text" class="inpMain short date_picker" id="beginTime" name="beginTime" value="${order.beginTime}"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:'readOnly'})" readonly="readonly" placeholder="开始时间" />
+				-
+				<input type="text" id="endTime" name="endTime" class="inpMain short date_picker" value="${order.endTime}"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',readOnly:'readOnly'})" readonly="readonly" placeholder="结束时间" />
+
+			</div>
+			
+			<div class="filter" >
+				<input type="text" class="inpMain short" placeholder="用户名  / 联系方式  / 用户ID" name="userInfo" value="${order.userInfo }" />
+
+				<input type="text" class="inpMain short" placeholder="订单号 " name="orderNummmm" value="${order.orderNummmm }" />
+				<input class="btn" type="submit" value="搜索" />
+			</div>
+
+		</form>
+		<div id="list">
+			<form name="deleteForm" id="deleteForm">
+				<table style="width: 100%;  " class="tableBasic list">
+					<tr>
+						<th>
+							<input type="checkbox" name="sltAll" id="sltAll" onclick="sltAllUser()" />
+						</th>
+						<th>订单号</th>
+						<th>订单类别</th>
+						<th>下单时间</th>
+						<th>快递单号</th>
+						<th>收货人</th>
+						<th>收货人联系电话</th>
+						<th width="150">收货人地址</th>
+						<th>订单实付</th>
+						<th>订单优惠</th>
+						<th>订单支付方式</th>
+						<th>支付时间</th>
+						<th>订单状态</th>
+						<th>操作</th>
+					</tr>
+					<c:choose>
+						<c:when test="${not empty orderList}">
+							<c:forEach items="${orderList}" var="order" varStatus="vs">
+								<tr class="main_info">
+									<td>
+										<input type="checkbox" name="orderIds" id="orderIds${order.order_id }" value="${order.order_id }" />
+									</td>
+									<td>${order.order_nummmm }</td>
+									<td>
+											<c:choose>
+										       <c:when test="${order.order_class=='1'}">
+										             试戴
+										       </c:when>
+										       <c:otherwise>
+										             售卖
+										       </c:otherwise>
+											</c:choose>	
+									</td>
+									<td>${order.create_time }</td>
+									<td>${order.order_code }</td>
+									<td>${order.userName }</td>
+									<td>${order.phone }</td>
+									<td>${order.address }</td>
+									<td>${order.actualPayment }</td>
+									<td>${orderMap.postFee}</td>
+									<td>
+										<c:choose>
+									       <c:when test="${order.paymentWay=='1'}">
+									             微信
+									       </c:when>
+									       <c:when test="${order.paymentWay=='2'}">
+									              支付宝
+									       </c:when>
+									       <c:otherwise>
+									              其他
+									       </c:otherwise>
+									</c:choose>
+									</td>
+									<td>
+										${order.paymentTime}
+									</td>
+									<td>
+										<c:if test="${order.order_status=='1'}">确认中 </c:if>
+										<c:if test="${order.order_status=='2'}">配送中 </c:if>
+										<c:if test="${order.order_status=='3'}">佩戴中 </c:if>
+										<c:if test="${order.order_status=='4'}">返还中 </c:if>
+										<c:if test="${order.order_status=='5'}">验收中 </c:if>
+										<c:if test="${order.order_status=='6'}">违规处理 </c:if>
+										<c:if test="${order.order_status=='7'}">验收完成 </c:if>
+										<c:if test="${order.order_status=='8'}">已取消</c:if>
+									</td>
+									
+									<td>
+										  <a href="/shopOrder/orderDetail.html?orderId=${order.order_id }">查看详情</a>
+										| <a href="/shopOrder/toUpdateExpress.html?orderId=${order.order_id }">填写物流</a>
+										| <a href="javascript:checkOrder('${order.order_id }','${order.order_status}');">验收</a>
+										|　<a href="javascript:cancleOrder('${order.order_id }','${order.order_status}');">取消订单</a>
+										| <a href="javascript:checkSuccessOrder('${order.order_id }','${order.order_status}');">验收完成</a>
+										|　<a href="javascript:checkFailOrder('${order.order_id }','${order.order_status}');">违规处理</a>
+									</td>
+								</tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr class="main_info">
+								<td colspan="23">没有相关数据</td>
+							</tr>
+						</c:otherwise>
+					</c:choose>
+				</table>
+			</form>
+		</div>
+		<div class="clear"></div>
+		<div class="page_and_btn">
+			<div>
+				<!-- <input type="button" id="btn_excel" class="btn" value="批量导出" title="批量导出" />
+				<input type="button" id="btn_hebingexcel" class="btn" value="合并导出" title="合并导出" />
+				<input type="button" id="btn_report" class="btn" value="批量报表" title="批量报表" /> -->
+			</div>
+			${order.page.pageStr }
+		</div>
+	</div>
+
+	<script type="text/javascript" src="../../style/plugins/datePicker/WdatePicker.js"></script>
+	<script type="text/javascript">
+		function sltAllUser() {
+			if ($("#sltAll").prop("checked")) {
+				$("input[name='orderIds']").prop("checked", true);
+			} else {
+				$("input[name='orderIds']").prop("checked", false);
+			}
+		}
+
+		function delOrder(orderId, createTime) {
+			var date = new Date(createTime);
+			var hours = date.getHours();
+			var minutes = date.getMinutes();
+			var seconds = date.getSeconds();
+			if (hours >= 16 && minutes >= 10 && seconds >= 0) {
+				alert('此订单不能删除，如需处理，请联系管理员！');
+			} else {
+				if (confirm("确定要删除这条订单吗？")) {
+					var url = "/shopOrder/del.html?orderId=" + orderId;
+					$.get(url, function(data) {
+						if (data == "1") {
+							alert('删除成功！');
+							document.location.reload();
+						}
+					});
+				}
+			}
+		}
+		
+		//验收订单
+		function checkOrder(orderId,status) {
+			if(status==4)
+			{
+				if (confirm("确定要验收订单吗？")) {
+					var url = "/shopOrder/checkOrder.html?status=5&orderId=" + orderId;
+					$.get(url, function(data) {
+						if (data == "1") {
+							alert('成功');
+							document.location.reload();
+						} else {
+							alert('失败');
+						}
+					});
+				}
+			}else
+			{
+				alert('只能验收返还中的订单！');
+			}
+		}
+		
+		//取消订单
+		function cancleOrder(orderId,status) {
+				if(status==1)
+				{
+					if (confirm("确定要取消订单吗？")) {
+						var url = "/shopOrder/checkOrder.html?status=8&orderId=" + orderId;
+						$.get(url, function(data) {
+							if (data == "1") {
+								alert('成功');
+								document.location.reload();
+							} else {
+								alert('失败');
+							}
+						});
+					}
+				}else
+				{
+					alert('只能取消确认中的订单！');
+				}
+		}
+		
+		//验收完成
+		function checkSuccessOrder(orderId,status) {
+			if(status==5)
+			{
+				if (confirm("确定验收完成吗？")) {
+					var url = "/shopOrder/checkOrder.html?status=7&orderId=" + orderId;
+					$.get(url, function(data) {
+						if (data == "1") {
+							alert('成功');
+							document.location.reload();
+						} else {
+							alert('失败');
+						}
+					});
+				}
+			}else
+			{
+				alert('只能操作验收中的订单！');
+			}
+		}
+		
+		//违规处理
+		function checkFailOrder(orderId,status) {
+			if(status==5)
+			{
+				if (confirm("确定是违规处理吗?")) {
+					var url = "/shopOrder/checkOrder.html?status=6&orderId=" + orderId;
+					$.get(url, function(data) {
+						if (data == "1") {
+							alert('成功');
+							document.location.reload();
+						} else {
+							alert('失败');
+						}
+					});
+				}
+			}else
+			{
+				alert('只能操作验收中的订单！');
+			}
+		}
+	
+		//导出单个订单excel
+		function excelOrder(orderId) {
+			if (orderId) {
+				window.location = "/shopOrder/excelOrderDetail.html?orderId=" + orderId;
+			}
+		}
+
+
+		
+
+		$(function(){
+			$('#btn_today').click(function(){
+				var today = date_format(new Date(), '-');
+				$('#beginTime').val(today + ' 00:00:00');
+				$('#endTime').val(today + ' 23:59:59');
+			});
+		});
+			
+		// 选中左侧相应的菜单
+		activeMenu('订单查询');
+	</script>
+</body>
+</html>

@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopOrderMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopOrder" >
+	<result column="order_id" property="orderId"/>
+	<result column="order_class" property="orderClass"/>
+	<result column="totalMoney" property="totalMoney"/>
+	<result column="actualPayment" property="actualPayment"/>
+	<result column="feeWaiver" property="feeWaiver"/>
+	<result column="postFee" property="postFee"/>
+	<result column="order_code" property="orderCode"/>
+	<result column="user_id" property="userId"/>
+	<result column="delivery_status" property="deliveryStatus"/>
+	<result column="return_status" property="returnStatus"/>
+	<result column="create_time" property="createTime"/>
+	<result column="is_assess" property="isAssess"/>
+	<result column="is_payment" property="isPayment"/>
+	<result column="order_nummmm" property="orderNummmm"/>
+	<result column="express" property="express"/>
+	<result column="express_num" property="expressNum"/>
+	<result column="commodity_num" property="commodityNum"/>
+	<result column="order_status" property="orderStatus"/>
+	<result column="queren_ok" property="querenOk"/>
+	<result column="name" property="name"/>
+	<result column="phone" property="phone"/>
+	<result column="address" property="address"/>
+	<result column="jiname" property="jiname"/>
+	<result column="jiaddress" property="jiaddress"/>
+	<result column="return_time" property="returnTime"/>
+	<result column="is_shouhou" property="isShouhou"/>
+	<result column="paymentWay" property="paymentWay"/>
+	<result column="paymentTime" property="paymentTime"/>
+	<result column="cancelTime" property="cancelTime"/>
+	<result column="distributionTime" property="distributionTime"/>
+	<result column="wearingDays" property="wearingDays"/>
+	<result column="returnExpress" property="returnExpress"/>
+	<result column="returnExpressCode" property="returnExpressCode"/>
+	<collection property="orderDetailList" ofType="java.util.List"
+					select="com.flf.mapper.ShopOrderDetailsMapper.getChainDetailByOrderId" column="order_id"/>
+</resultMap>
+       
+<!-- shop_order table all fields -->
+<sql id="Base_Column_List" >
+	 order_id,order_code,user_id,delivery_status,return_status,create_time,is_assess,is_payment,order_nummmm,express,express_num,commodity_num,
+	 order_status,queren_ok,name,phone,address,jiname,jiaddress,return_time,is_shouhou,paymentWay,paymentTime,cancelTime,distributionTime,
+	 wearingDays,returnExpress,returnExpressCode,order_class
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.orderId != null and condition.orderId != ''" >
+	    and order_id =  #{condition.orderId}
+	</if>
+	<if test="condition.orderClass != null and condition.orderClass != ''" >
+	    and order_class =  #{condition.orderClass}
+	</if>
+	<if test="condition.orderCode != null and condition.orderCode != ''" >
+	    and order_code =  #{condition.orderCode}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.deliveryStatus != null and condition.deliveryStatus != ''" >
+	    and delivery_status =  #{condition.deliveryStatus}
+	</if>
+	<if test="condition.returnStatus != null and condition.returnStatus != ''" >
+	    and return_status =  #{condition.returnStatus}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.isAssess != null and condition.isAssess != ''" >
+	    and is_assess =  #{condition.isAssess}
+	</if>
+	<if test="condition.isPayment != null and condition.isPayment != ''" >
+	    and is_payment =  #{condition.isPayment}
+	</if>
+	<if test="condition.orderNummmm != null and condition.orderNummmm != ''" >
+	    and order_nummmm =  #{condition.orderNummmm}
+	</if>
+	<if test="condition.express != null and condition.express != ''" >
+	    and express =  #{condition.express}
+	</if>
+	<if test="condition.expressNum != null and condition.expressNum != ''" >
+	    and express_num =  #{condition.expressNum}
+	</if>
+	<if test="condition.commodityNum != null and condition.commodityNum != ''" >
+	    and commodity_num =  #{condition.commodityNum}
+	</if>
+	<if test="condition.orderStatus != null and condition.orderStatus != ''" >
+	    and order_status =  #{condition.orderStatus}
+	</if>
+	<if test="condition.querenOk != null and condition.querenOk != ''" >
+	    and queren_ok =  #{condition.querenOk}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.phone != null and condition.phone != ''" >
+	    and phone =  #{condition.phone}
+	</if>
+	<if test="condition.address != null and condition.address != ''" >
+	    and address =  #{condition.address}
+	</if>
+	<if test="condition.jiname != null and condition.jiname != ''" >
+	    and jiname =  #{condition.jiname}
+	</if>
+	<if test="condition.jiaddress != null and condition.jiaddress != ''" >
+	    and jiaddress =  #{condition.jiaddress}
+	</if>
+	<if test="condition.returnTime != null and condition.returnTime != ''" >
+	    and return_time =  #{condition.returnTime}
+	</if>
+	<if test="condition.isShouhou != null and condition.isShouhou != ''" >
+	    and is_shouhou =  #{condition.isShouhou}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="orderId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_order(order_id,order_code,user_id,delivery_status,return_status,create_time,is_assess,is_payment,order_nummmm,express,express_num,commodity_num,order_status,queren_ok,name,phone,address,jiname,jiaddress,return_time,is_shouhou,paymentWay,paymentTime,cancelTime,distributionTime,wearingDays,returnExpress,returnExpressCode,order_class,totalMoney,actualPayment,feeWaiver,postFee)
+ values(#{orderId},#{orderCode},#{userId},#{deliveryStatus},#{returnStatus},now(),#{isAssess},#{isPayment},#{orderNummmm},#{express},#{expressNum},#{commodityNum},#{orderStatus},#{querenOk},#{name},#{phone},#{address},#{jiname},#{jiaddress},#{returnTime},#{isShouhou},#{paymentWay},#{paymentTime},#{cancelTime},#{distributionTime},#{wearingDays},#{returnExpress},#{returnExpressCode},#{orderClass},#{totalMoney},#{actualPayment},#{feeWaiver},#{postFee})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_order set order_code=#{orderCode},user_id=#{userId},delivery_status=#{deliveryStatus},return_status=#{returnStatus},create_time=now(),is_assess=#{isAssess},is_payment=#{isPayment},order_nummmm=#{orderNummmm},express=#{express},express_num=#{expressNum},commodity_num=#{commodityNum},order_status=#{orderStatus},queren_ok=#{querenOk},name=#{name},phone=#{phone},address=#{address},jiname=#{jiname},jiaddress=#{jiaddress},return_time=#{returnTime},is_shouhou=#{isShouhou} where order_id=#{orderId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_order set 
+	<trim  suffixOverrides="," >
+	<if test="orderCode != null  ">
+		order_code=#{orderCode},
+	</if>
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="deliveryStatus != null  ">
+		delivery_status=#{deliveryStatus},
+	</if>
+	<if test="returnStatus != null  ">
+		return_status=#{returnStatus},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="isAssess != null  ">
+		is_assess=#{isAssess},
+	</if>
+	<if test="isPayment != null  ">
+		is_payment=#{isPayment},
+	</if>
+	<if test="orderNummmm != null  ">
+		order_nummmm=#{orderNummmm},
+	</if>
+	<if test="express != null  ">
+		express=#{express},
+	</if>
+	<if test="expressNum != null  ">
+		express_num=#{expressNum},
+	</if>
+	<if test="commodityNum != null  ">
+		commodity_num=#{commodityNum},
+	</if>
+	<if test="orderStatus != null  ">
+		order_status=#{orderStatus},
+	</if>
+	<if test="querenOk != null  ">
+		queren_ok=#{querenOk},
+	</if>
+	<if test="name != null  ">
+		name=#{name},
+	</if>
+	<if test="phone != null  ">
+		phone=#{phone},
+	</if>
+	<if test="address != null  ">
+		address=#{address},
+	</if>
+	<if test="jiname != null  ">
+		jiname=#{jiname},
+	</if>
+	<if test="jiaddress != null  ">
+		jiaddress=#{jiaddress},
+	</if>
+	<if test="returnTime != null  ">
+		return_time=#{returnTime},
+	</if>
+	<if test="isShouhou != null  ">
+		is_shouhou=#{isShouhou},
+	</if>
+	<if test="paymentWay != null  ">
+		paymentWay=#{paymentWay},
+	</if>
+	<if test="paymentTime != null  ">
+		paymentTime=#{paymentTime},
+	</if>
+	<if test="cancelTime != null  ">
+		cancelTime=#{cancelTime},
+	</if>
+	<if test="distributionTime != null  ">
+		distributionTime=#{distributionTime},
+	</if>
+	<if test="wearingDays != null  ">
+		wearingDays=#{wearingDays},
+	</if>
+	
+	<if test="returnExpress != null  ">
+		returnExpress=#{returnExpress},
+	</if>
+	<if test="returnExpressCode != null  ">
+		returnExpressCode=#{returnExpressCode},
+	</if>
+	</trim> where order_id=#{orderId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_order where order_id = #{orderId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_order where order_id = #{orderId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_order 
+	<include refid="Example_Where_Clause"/>
+</select>
+
+<select id="getShopOrderByUserId" resultType="java.lang.Integer"  parameterType="Object">
+	SELECT COUNT(1) AS orderNum FROM shop_order WHERE user_id=#{userId} AND order_status NOT IN (7,8)
+	and order_class=1
+</select>
+
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_order 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="getOrderByOrderNo"  resultMap="BaseResultMap" resultType="String">
+		SELECT order_id,IFNULL(order_code,'') AS order_code,user_id,create_time,order_nummmm,IFNULL(express,'') AS express,
+		IFNULL(express_num,'') AS express_num,order_status,NAME,phone,address,wearingDays,IFNULL(paymentWay,'') AS paymentWay,
+		DATE_FORMAT(IFNULL(distributionTime,'') ,'%Y-%m-%d') AS distributionTime,actualPayment,is_payment,order_class
+		FROM shop_order WHERE order_nummmm=#{orderNo}
+	</select>
+  	
+  	<select id="getOrderTimeByUserId" parameterType="Object" resultType="java.util.HashMap">
+		SELECT *
+		FROM shop_order WHERE 1=1 
+		<if test="condition.userId != null and condition.userId != ''" >
+		AND user_id=#{condition.userId}
+		</if>
+	     ORDER BY create_time DESC
+		<if test="limitClause != null and limitClause != ''" >
+			${limitClause}
+		</if>
+	</select>
+	
+	
+	<select id="listPageOrder" parameterType="Object" resultType="java.util.HashMap">
+		select o.*,u.user_bname AS userName,u.mobilePhone  from shop_order o left join shop_user u on o.user_id = u.id
+		where 1=1 
+		
+		<if test="orderNummmm != null and orderNummmm != ''" >
+			and o.order_nummmm  =  #{orderNummmm}
+		</if>
+		<if test="orderClass != null and orderClass != ''" >
+			and o.order_class  =  #{orderClass}
+		</if>
+		<if test="isPayment != null and isPayment != ''" >
+			and o.is_payment  =  #{isPayment}
+		</if>
+		
+		<if test="express != null and express != ''" >
+			and o.express  =  #{express}
+		</if>
+		<if test="expressNum != null and expressNum != ''" >
+			and o.express_num  =  #{expressNum}
+		</if>
+		<if test="orderStatus != null and orderStatus != ''" >
+			and o.order_status  =  #{orderStatus}
+		</if>
+
+		<if test="querenOk != null and querenOk != ''" >
+			and o.queren_ok  =  #{querenOk}
+		</if>
+
+		<if test="mobilePhone != null and mobilePhone != ''" >
+			and o.mobilePhone  =  #{mobilePhone}
+		</if>
+		order by o.order_id
+		<if test="orderByClause != null and orderByClause != ''" >
+			,${orderByClause}
+		</if>
+		desc
+	</select>
+	
+	<select id="getOrderInfoById" parameterType="Object" resultType="java.util.HashMap">
+		SELECT o.*,u.name as username,u.mobilePhone as mobilePhone
+		FROM shop_order o
+		LEFT JOIN shop_user u ON o.`user_id`=u.`id`
+		WHERE o.`order_id`= #{orderId}
+	</select>
+	
+	<update id="updateExpress" parameterType="Object">
+		update shop_order set express  =  #{express} ,	express_num=#{expressNum},
+		order_code=#{orderCode},distributionTime =#{distributionTime},order_status = 2 where order_id=#{orderId}
+	</update>
+	
+	<update id="updateCheckOrder" parameterType="Object">
+		update shop_order set order_status  =  #{orderStatus} where order_id=#{orderId}
+	</update>
+	
+	<select id="getOrderWearNumber" parameterType="Object" resultType="java.util.HashMap">
+		SELECT * from shop_order where order_status = 3
+	</select>
+	
+	<update id="updateOrderWearingDays" parameterType="Object">
+			UPDATE shop_order SET wearingDays = wearingDays+1 WHERE order_id = #{orderId}
+	</update>
+	
+	<select id="getOrderWearNumberStatus" parameterType="Object" resultType="java.util.HashMap">
+		SELECT  * FROM shop_order WHERE order_status = 2 AND DATEDIFF(NOW(),create_time)>=#{order_wearNumber} 
+	</select>
+	
+	<update id="updateOrderWearStatus" parameterType="Object">
+			UPDATE shop_order SET order_status = 3 WHERE order_id = #{orderId}
+	</update>
+
+	<update id="updateOrderPayStatus" parameterType="Object">
+		UPDATE shop_order
+		SET `order_status` = 4, is_payment = 'yes', paymentWay = #{paymentWay}, paymentTime = #{paymentTime}
+		WHERE order_nummmm  =  #{orderNummmm} and order_status = 3
+	</update>
+	
+</mapper>   

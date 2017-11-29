@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopUserVipMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopUserVip" >
+	<result column="id" property="id"/>
+	<result column="user_id" property="userId"/>
+	<result column="vip_id" property="vipId"/>
+	<result column="vip_startime" property="vipStartime"/>
+	<result column="vip_endtime" property="vipEndtime"/>
+	<result column="vip_order" property="vipOrder"/>
+	<result column="vip_name" property="vipName"/>
+	<result column="vip_grade" property="vipGrade"/>
+	<result column="is_buy" property="isBuy"/>
+</resultMap>
+       
+<!-- shop_user_vip table all fields -->
+<sql id="Base_Column_List" >
+	 id,user_id,vip_id,vip_startime,vip_endtime,vip_order,vip_name,vip_grade,is_buy
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.vipId != null and condition.vipId != ''" >
+	    and vip_id =  #{condition.vipId}
+	</if>
+	<if test="condition.vipStartime != null and condition.vipStartime != ''" >
+	    and vip_startime =  #{condition.vipStartime}
+	</if>
+	<if test="condition.vipEndtime != null and condition.vipEndtime != ''" >
+	    and vip_endtime =  #{condition.vipEndtime}
+	</if>
+	<if test="condition.vipOrder != null and condition.vipOrder != ''" >
+	    and vip_order =  #{condition.vipOrder}
+	</if>
+	<if test="condition.vipName != null and condition.vipName != ''" >
+	    and vip_name =  #{condition.vipName}
+	</if>
+	<if test="condition.vipGrade != null and condition.vipGrade != ''" >
+	    and vip_grade =  #{condition.vipGrade}
+	</if>
+	<if test="condition.isBuy != null and condition.isBuy != ''" >
+	    and is_buy =  #{condition.isBuy}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_user_vip(id,user_id,vip_id,vip_startime,vip_endtime,vip_order,vip_name,vip_grade,is_buy)
+ values(#{id},#{userId},#{vipId},#{vipStartime},#{vipEndtime},#{vipOrder},#{vipName},#{vipGrade},#{isBuy})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_user_vip set user_id=#{userId},vip_id=#{vipId},vip_startime=#{vipStartime},vip_endtime=#{vipEndtime},vip_order=#{vipOrder},vip_name=#{vipName},vip_grade=#{vipGrade},is_buy=#{isBuy} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_user_vip set 
+	<trim  suffixOverrides="," >
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="vipId != null  ">
+		vip_id=#{vipId},
+	</if>
+	<if test="vipStartime != null  ">
+		vip_startime=#{vipStartime},
+	</if>
+	<if test="vipEndtime != null  ">
+		vip_endtime=#{vipEndtime},
+	</if>
+	<if test="vipOrder != null  ">
+		vip_order=#{vipOrder},
+	</if>
+	<if test="vipName != null  ">
+		vip_name=#{vipName},
+	</if>
+	<if test="vipGrade != null  ">
+		vip_grade=#{vipGrade},
+	</if>
+	<if test="isBuy != null  ">
+		is_buy=#{isBuy},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_user_vip where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_user_vip where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_user_vip 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_user_vip 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

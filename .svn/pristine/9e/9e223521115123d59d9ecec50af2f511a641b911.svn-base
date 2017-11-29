@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopMenuMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopMenu" >
+	<result column="id" property="id"/>
+	<result column="menu_name" property="menuName"/>
+	<result column="menu_link" property="menuLink"/>
+	<result column="fid" property="fid"/>
+	<result column="sort" property="sort"/>
+	<result column="show" property="show"/>
+	<result column="condition" property="condition"/>
+	<result column="on" property="on"/>
+	<result column="type" property="type"/>
+	<result column="status" property="status"/>
+</resultMap>
+       
+<!-- shop_menu table all fields -->
+<sql id="Base_Column_List" >
+	 id,menu_name,menu_link,fid,sort,show,condition,on,type,status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.menuName != null and condition.menuName != ''" >
+	    and menu_name =  #{condition.menuName}
+	</if>
+	<if test="condition.menuLink != null and condition.menuLink != ''" >
+	    and menu_link =  #{condition.menuLink}
+	</if>
+	<if test="condition.fid != null and condition.fid != ''" >
+	    and fid =  #{condition.fid}
+	</if>
+	<if test="condition.sort != null and condition.sort != ''" >
+	    and sort =  #{condition.sort}
+	</if>
+	<if test="condition.show != null and condition.show != ''" >
+	    and show =  #{condition.show}
+	</if>
+	<if test="condition.condition != null and condition.condition != ''" >
+	    and condition =  #{condition.condition}
+	</if>
+	<if test="condition.on != null and condition.on != ''" >
+	    and on =  #{condition.on}
+	</if>
+	<if test="condition.type != null and condition.type != ''" >
+	    and type =  #{condition.type}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_menu(id,menu_name,menu_link,fid,sort,show,condition,on,type,status)
+ values(#{id},#{menuName},#{menuLink},#{fid},#{sort},#{show},#{condition},#{on},#{type},#{status})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_menu set menu_name=#{menuName},menu_link=#{menuLink},fid=#{fid},sort=#{sort},show=#{show},condition=#{condition},on=#{on},type=#{type},status=#{status} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_menu set 
+	<trim  suffixOverrides="," >
+	<if test="menuName != null  ">
+		menu_name=#{menuName},
+	</if>
+	<if test="menuLink != null  ">
+		menu_link=#{menuLink},
+	</if>
+	<if test="fid != null  ">
+		fid=#{fid},
+	</if>
+	<if test="sort != null  ">
+		sort=#{sort},
+	</if>
+	<if test="show != null  ">
+		show=#{show},
+	</if>
+	<if test="condition != null  ">
+		condition=#{condition},
+	</if>
+	<if test="on != null  ">
+		on=#{on},
+	</if>
+	<if test="type != null  ">
+		type=#{type},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_menu where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_menu where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_menu 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_menu 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

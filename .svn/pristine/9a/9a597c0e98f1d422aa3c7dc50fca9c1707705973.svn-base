@@ -1,0 +1,502 @@
+package com.flf.service.impl;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.base.criteria.Criteria;
+import com.base.service.BaseServiceImpl;
+import com.flf.entity.ShopCommodity;
+import com.flf.entity.ShopOrder;
+import com.flf.entity.ShopOrderDetails;
+import com.flf.entity.ShopUser;
+import com.flf.mapper.ShopOrderMapper;
+import com.flf.service.RedisSpringProxy;
+import com.flf.service.ShopCommodityService;
+import com.flf.service.ShopOrderDetailsService;
+import com.flf.service.ShopOrderService;
+import com.flf.service.ShopUserService;
+import com.flf.service.ShopVipService;
+import com.flf.util.DateUtil;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopOrderService<br>
+ */
+@Service("shopOrderService")
+public class ShopOrderServiceImpl extends BaseServiceImpl implements ShopOrderService {
+	private final static Logger log = Logger.getLogger(ShopOrderServiceImpl.class);
+
+	@Autowired
+	private ShopOrderMapper dao;
+	@Autowired(required = false)
+	private ShopUserService shopUserService;
+	@Autowired(required = false)
+	private ShopCommodityService shopCommodityService;
+	@Autowired(required = false)
+	private ShopVipService shopVipService;
+	@Autowired(required = false)
+	private ShopOrderDetailsService shopOrderDetailsService;
+
+	@Autowired
+	private RedisSpringProxy redisSpringProxy;
+
+	@Override
+	public ShopOrderMapper getDao() {
+		return dao;
+	}
+
+	@Override
+	public ShopOrder getOrderByOrderNo(String orderNo) {
+
+		ShopOrder order = dao.getOrderByOrderNo(orderNo);
+		if (null != order) {
+			List<ShopOrderDetails> detail = shopOrderDetailsService.getDetailByOrderId(order.getOrderId());
+			if (null != detail && detail.size() > 0) {
+				order.setOrderDetailList(detail);
+			}
+		}
+		return order;
+	}
+
+	@Override
+	public List<Map<String, Object>> getOrderTimeByUserId(Criteria criteria) {
+		return dao.getOrderTimeByUserId(criteria);
+	}
+
+	@Override
+	public List<Map<String, Object>> listAllOrder(ShopOrder orderVo) {
+		return dao.listPageOrder(orderVo);
+	}
+
+	@Override
+	public Map<String, Object> saveShopOrder(ShopOrder order, String orderNo) {
+		int orderId = 0;
+		int resultId = 0;
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		order.setOrderNummmm(orderNo);
+		order.setCreateTime(DateUtil.datetime2Str(new Date()));
+		order.setOrderStatus(1);
+		order.setPostFee(BigDecimal.ZERO);
+		order.setTotalMoney(BigDecimal.ZERO);
+		order.setActualPayment(BigDecimal.ZERO);
+		order.setTotalMoney(BigDecimal.ZERO);
+		order.setFeeWaiver(BigDecimal.ZERO);
+		order.setWearingDays(0);
+		order.setIsPayment("no");
+
+		try {
+			ShopUser user = shopUserService.queryById(order.getUserId());
+			// 如果押金=0 不能下单
+		
+				if (user.getDeposit().compareTo(BigDecimal.ZERO) <= 0) {
+					log.info("账户未缴押金，无法下单");
+					resultId = 1;
+					map.put("resultId", resultId);
+					return map;
+				}
+
+				if (user.getRenzhen_status() != 1) {
+					log.info("您的账号未认证！");
+					resultId = 2;
+					map.put("resultId", resultId);
+					return map;
+				}
+				
+			
+			
+
+			Map<String, Object> commodityCost = this.getCommodityCost(order.getOrderDetailList(), user);
+			// 验证商品是否下架
+			if ((boolean) commodityCost.get("isShelves")) {
+				log.info("该订单包含下架商品");
+				resultId = 3;
+				map.put("resultId", resultId);
+				return map;
+			}
+			// 验证商品是否下架
+			if ((boolean) commodityCost.get("isStock")) {
+				log.info("该订单包含库存不足的商品，商品名称：" + commodityCost.get("commodityName"));
+				resultId = 6;
+				map.put("resultId", resultId);
+				map.put("commodityName", commodityCost.get("commodityName"));
+				return map;
+			}
+
+			order.setCommodityNum(commodityCost.get("number").toString());
+			// 验证商品是否vip
+			if ((boolean) commodityCost.get("vipCommodity")) {
+				log.info("用户VIP等级不能买订单中的一个商品");
+				resultId = 5;
+				map.put("resultId", resultId);
+				return map;
+			}
+
+			String disableOrder = (String) redisSpringProxy.read("SystemConfiguration_disableOrder");
+			boolean disableOrderFlag = Boolean.parseBoolean(disableOrder);
+
+			int orderNumer = dao.getShopOrderByUserId(Integer.parseInt(order.getUserId()));
+			if (disableOrderFlag) {
+				if (orderNumer > 0) {
+					log.info("帐号有未完成的订单，请先把订单完成再下单");
+					resultId = 4;
+					map.put("resultId", resultId);
+					return map;
+				}
+			}
+
+			// 验证订单详情不为空
+			List<ShopOrderDetails> detailsList = order.getOrderDetailList();
+
+			if (detailsList.size() > 0) {
+				// add 返回的对象里面可以取id值
+				orderId = this.add(order);
+				if (orderId > 0) {
+					for (ShopOrderDetails details : detailsList) {
+						details.setOrderId(order);
+						details.setActualPayment(BigDecimal.ZERO);
+						shopOrderDetailsService.add(details);
+					}
+				}
+			}
+
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultId = 1;
+			map.put("resultId", resultId);
+			return map;
+		}
+		map.put("resultId", resultId);
+		return map;
+	}
+
+	private Map<String, Object> getCommodityCost(List<ShopOrderDetails> orderDetailList, ShopUser user)
+			throws Exception {
+		boolean isShelves = false;
+		boolean vipCommodity = false;
+		boolean isStock = false;
+		int userVip = user.getUserVip();
+		StringBuffer commodityName = new StringBuffer();
+		int number = 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		String commodityrant = (String) redisSpringProxy.read("SystemConfiguration_commodity_rant_" + userVip);
+		ShopCommodity commodity;
+		for (ShopOrderDetails details : orderDetailList) {
+			commodity = shopCommodityService.getCommodityById(details.getCommodityId());
+
+			// 有下架商品
+			if ("no".equals(commodity.getIsUpjia())) {
+				isShelves = true;
+			}
+			map.put("isShelves", isShelves);
+
+			if (commodity.getMemberLever() > userVip) {
+				vipCommodity = true;
+			}
+			map.put("vipCommodity", vipCommodity);
+			number += details.getCommodityOnenum();
+
+			if (commodityrant.equals("goldenRent")) {
+				details.setCommodityrent(commodity.getGoldenRent());
+			} else if (commodityrant.equals("platinumRent")) {
+				details.setCommodityrent(commodity.getPlatinumRent());
+			} else if (commodityrant.equals("masonryRent")) {
+				details.setCommodityrent(commodity.getMasonryRent());
+			}
+
+			// 库存不足
+			if (Integer.parseInt(commodity.getCommodityStock()) < details.getCommodityOnenum()) {
+				isStock = true;
+				commodityName.append(commodity.getCommodityName());
+			}
+
+		}
+		map.put("number", number);
+		map.put("isStock", isStock);
+		map.put("commodityName", commodityName);
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> getOrderInfoById(int orderId) {
+		return dao.getOrderInfoById(orderId);
+	}
+
+	@Override
+	public int updateExpress(ShopOrder orderVo) {
+		// 更新物流单号
+		orderVo.setDistributionTime(DateUtil.datetime2Str(new Date()));
+		return dao.updateExpress(orderVo);
+	}
+
+	@Override
+	public boolean updateInventoryReduce(ShopOrder orderVo) {
+		boolean inventoryIsEnough = true;
+
+		// 库存不足的提示信息
+		StringBuilder understockMsg;
+
+		// 单个商品的库存量
+		int inventory;
+
+		// 商品状态
+		String getShelvesByNo;
+
+		// 是否需要下架商品
+		boolean isSoldOut = false;
+		ShopOrder sporder = dao.queryById(orderVo.getOrderId());
+		// 后台配置的可剩余的最大库存量，如果用户订单中某商品的数量大于此数值，则下架该商品
+		Integer excessInventory = Integer.parseInt((String) redisSpringProxy
+				.read("SystemConfiguration_excess_inventory"));
+		log.info("订单【" + sporder.getOrderNummmm() + "】进入扣减库存：");
+
+		// 减库存时受影响的行数，如果没有减成功，则是库存不足
+		int rows;
+		if (sporder.getOrderDetailList().size() > 0) {
+			for (ShopOrderDetails details : sporder.getOrderDetailList()) {
+				ShopCommodity commodity = shopCommodityService.getCommodityById(details.getCommodityId());
+				// 商品的当前库存
+				inventory = Integer.parseInt(commodity.getCommodityStock());
+				// 商品的当前状态
+				getShelvesByNo = commodity.getIsUpjia().toString();
+				log.info(commodity.getCommodityName() + " 剩余库存: " + inventory + ",商品的当前状态：" + getShelvesByNo);
+
+				// 订单中包含下架商品时，抛异常回滚之前操作
+				if (getShelvesByNo.equals("no")) {
+					understockMsg = new StringBuilder();
+					understockMsg.append(commodity.getCommodityName());
+					understockMsg.append("已下架");
+					throw new ArithmeticException(understockMsg.toString());
+				}
+
+				if (inventory >= details.getCommodityOnenum()) {
+					// 库存足够，减去订单中相应的库存
+					rows = shopCommodityService.updateInventoryReduce(details);
+					if (rows > 0) {
+						inventory = Integer.parseInt(shopCommodityService.getCommodityById(details.getCommodityId())
+								.getCommodityStock());
+						if (inventory == 0) {
+							// 库存=0，下架商品
+							// shopCommodityService.updateSoldOut(details.getCommodityId());
+
+							log.info("商品售完，清缓存，建索引。commodityId:" + details.getCommodityId());
+						}
+					} else {
+						inventoryIsEnough = false;
+					}
+				} else {
+					// 库存小于订单中的商品数量
+					if (details.getCommodityOnenum() > excessInventory || inventory == 0) {
+						// 库存小于最大滞留库存时，下架商品，controller的catch中操作
+						isSoldOut = true;
+					}
+					inventoryIsEnough = false;
+				}
+
+				if (!inventoryIsEnough) {
+					understockMsg = new StringBuilder();
+					understockMsg.append(commodity.getCommodityName());
+					understockMsg.append("库存不足，剩余");
+					understockMsg.append(inventory);
+					understockMsg.append("份");
+
+					// 需要将该商品下架时，将以下信息返回
+					if (isSoldOut) {
+						understockMsg.append(";");
+						understockMsg.append(details.getCommodityId());
+					}
+					throw new ArithmeticException(understockMsg.toString());
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public void updateCheckOrder(ShopOrder order) {
+		dao.updateCheckOrder(order);
+	}
+
+	@Override
+	public List<Map<String, Object>> getOrderWearNumber() {
+		return dao.getOrderWearNumber();
+	}
+
+	@Override
+	public void updateOrderWearingDays(Map<String, Object> map) {
+		if (null != map.get("order_id") && null != map.get("user_id") && null != map.get("wearingDays")) {
+			int orderId = Integer.parseInt(map.get("order_id").toString());
+			int userId = Integer.parseInt(map.get("user_id").toString());
+			int wearingDays = Integer.parseInt(map.get("wearingDays").toString());
+
+			log.info("用户ID：" + userId + ",当前佩戴天数：" + wearingDays + ",订单id：" + orderId);
+
+			dao.updateOrderWearingDays(orderId);
+
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> getOrderWearNumber(int order_wearNumber) {
+		return dao.getOrderWearNumberStatus(order_wearNumber);
+	}
+
+	@Override
+	public void updateOrderStatus(Map<String, Object> map) {
+		if (null != map.get("order_id") && null != map.get("user_id") && null != map.get("wearingDays")) {
+			int orderId = Integer.parseInt(map.get("order_id").toString());
+			int userId = Integer.parseInt(map.get("user_id").toString());
+
+			log.info("用户ID：" + userId + "修改订单id：" + orderId + "+状态为佩戴中：");
+
+			dao.updateOrderWearStatus(orderId);
+
+		}
+	}
+
+	@Override
+	public void updateSettlementOrder(String orderNo, Double actualPayment) {
+		ShopOrder order = new ShopOrder();
+		order.setOrderNummmm(orderNo);
+		order.setActualPayment(BigDecimal.valueOf(actualPayment));
+		order.setTotalMoney(BigDecimal.valueOf(actualPayment));
+		order.setWearingDays(0);
+		order.setReturnTime(DateUtil.datetime2Str(new Date()));
+		dao.updateBySelective(order);
+	}
+
+	@Override
+	public void updateOrderPayStatus(String paymentTarget, Integer rechargeType) {
+		try {
+			ShopOrder order = this.getOrderByOrderNo(paymentTarget);
+			// 判断该订单的状态是否需要修改
+			if (order.getOrderStatus() == 3) {
+				// 更新订单是否付款为是 支付时间 订单状态为4
+				order.setOrderNummmm(order.getOrderNummmm());
+				order.setPaymentWay(rechargeType);
+				order.setPaymentTime(DateUtil.datetime2Str(new Date()));
+				dao.updateOrderPayStatus(order);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public int isOrderByUserId(int userId) {
+		return dao.getShopOrderByUserId(userId);
+	}
+	
+	
+	@Override
+	public Map<String, Object> saveSaleOrder(ShopOrder order, String orderNo) {
+		int orderId = 0;
+		int resultId = 0;
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		order.setOrderNummmm(orderNo);
+		order.setCreateTime(DateUtil.datetime2Str(new Date()));
+		order.setOrderStatus(1);
+		order.setPostFee(BigDecimal.ZERO);
+		order.setWearingDays(0);
+
+		try {
+			ShopUser user = shopUserService.queryById(order.getUserId());
+				
+			Map<String, Object> commodityCost = this.getSaleCost(order.getOrderDetailList(), user);
+			// 验证商品是否下架
+			if ((boolean) commodityCost.get("isShelves")) {
+				log.info("该订单包含下架商品");
+				resultId = 3;
+				map.put("resultId", resultId);
+				return map;
+			}
+			// 验证商品是否下架
+			if ((boolean) commodityCost.get("isStock")) {
+				log.info("该订单包含库存不足的商品，商品名称：" + commodityCost.get("commodityName"));
+				resultId = 6;
+				map.put("resultId", resultId);
+				map.put("commodityName", commodityCost.get("commodityName"));
+				return map;
+			}
+
+			order.setCommodityNum(commodityCost.get("number").toString());
+			
+			String disableOrder = (String) redisSpringProxy.read("SystemConfiguration_disableOrder");
+			boolean disableOrderFlag = Boolean.parseBoolean(disableOrder);
+
+			// 验证订单详情不为空
+			List<ShopOrderDetails> detailsList = order.getOrderDetailList();
+
+			if (detailsList.size() > 0) {
+				order.setPaymentTime(DateUtil.datetime2Str(new Date()));
+				// add 返回的对象里面可以取id值
+				orderId = this.add(order);
+				if (orderId > 0) {
+					for (ShopOrderDetails details : detailsList) {
+						details.setOrderId(order);
+						//details.setActualPayment(BigDecimal.ZERO);
+						shopOrderDetailsService.add(details);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultId = 1;
+			map.put("resultId", resultId);
+			return map;
+		}
+		map.put("resultId", resultId);
+		return map;
+	}
+	
+	private Map<String, Object> getSaleCost(List<ShopOrderDetails> orderDetailList, ShopUser user)
+			throws Exception {
+		boolean isShelves = false;
+		boolean vipCommodity = false;
+		boolean isStock = false;
+		int userVip = user.getUserVip();
+		StringBuffer commodityName = new StringBuffer();
+		int number = 0;
+		Map<String, Object> map = new HashMap<String, Object>();
+		String commodityrant = (String) redisSpringProxy.read("SystemConfiguration_commodity_rant_" + userVip);
+		ShopCommodity commodity;
+		for (ShopOrderDetails details : orderDetailList) {
+			commodity = shopCommodityService.getCommodityById(details.getCommodityId());
+
+			// 有下架商品
+			if ("no".equals(commodity.getIsUpjia())) {
+				isShelves = true;
+			}
+			map.put("isShelves", isShelves);
+
+			number += details.getCommodityOnenum();
+
+			// 库存不足
+			if (Integer.parseInt(commodity.getCommodityStock()) < details.getCommodityOnenum()) {
+				isStock = true;
+				commodityName.append(commodity.getCommodityName());
+			}
+
+		}
+		map.put("number", number);
+		map.put("isStock", isStock);
+		map.put("commodityName", commodityName);
+		return map;
+	}
+}

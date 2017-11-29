@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopRecommendMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopRecommend" >
+	<result column="recommend_id" property="recommendId"/>
+	<result column="commodity_id" property="commodityId"/>
+	<result column="big_img" property="bigImg"/>
+	<result column="order" property="order"/>
+	<result column="create_time" property="createTime"/>
+	<result column="biao" property="biao"/>
+	<result column="name" property="name"/>
+</resultMap>
+       
+<!-- shop_recommend table all fields -->
+<sql id="Base_Column_List" >
+	 recommend_id,commodity_id,big_img,order,create_time,biao,name
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.recommendId != null and condition.recommendId != ''" >
+	    and recommend_id =  #{condition.recommendId}
+	</if>
+	<if test="condition.commodityId != null and condition.commodityId != ''" >
+	    and commodity_id =  #{condition.commodityId}
+	</if>
+	<if test="condition.bigImg != null and condition.bigImg != ''" >
+	    and big_img =  #{condition.bigImg}
+	</if>
+	<if test="condition.order != null and condition.order != ''" >
+	    and order =  #{condition.order}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.biao != null and condition.biao != ''" >
+	    and biao =  #{condition.biao}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_recommend(recommend_id,commodity_id,big_img,order,create_time,biao,name)
+ values(#{recommendId},#{commodityId},#{bigImg},#{order},now(),#{biao},#{name})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_recommend set commodity_id=#{commodityId},big_img=#{bigImg},order=#{order},create_time=now(),biao=#{biao},name=#{name} where recommend_id=#{recommendId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_recommend set 
+	<trim  suffixOverrides="," >
+	<if test="commodityId != null  ">
+		commodity_id=#{commodityId},
+	</if>
+	<if test="bigImg != null  ">
+		big_img=#{bigImg},
+	</if>
+	<if test="order != null  ">
+		order=#{order},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="biao != null  ">
+		biao=#{biao},
+	</if>
+	<if test="name != null  ">
+		name=#{name},
+	</if>
+	</trim> where recommend_id=#{recommendId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_recommend where recommend_id = #{recommendId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_recommend where recommend_id = #{recommendId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_recommend 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_recommend 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopUserInfoMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopUserInfo" >
+	<result column="user_id" property="userId"/>
+	<result column="user_name" property="userName"/>
+	<result column="user_integral" property="userIntegral"/>
+	<result column="user_tel" property="userTel"/>
+	<result column="user_wechat" property="userWechat"/>
+	<result column="user_sex" property="userSex"/>
+	<result column="user_profession" property="userProfession"/>
+	<result column="user_age" property="userAge"/>
+	<result column="buy_time" property="buyTime"/>
+	<result column="create_time" property="createTime"/>
+	<result column="user_openid" property="userOpenid"/>
+	<result column="is_member" property="isMember"/>
+	<result column="user_wedding" property="userWedding"/>
+	<result column="user_love" property="userLove"/>
+	<result column="user_icon" property="userIcon"/>
+	<result column="user_deaddress" property="userDeaddress"/>
+	<result column="user_idcard" property="userIdcard"/>
+	<result column="user_bname" property="userBname"/>
+	<result column="user_creditnumber" property="userCreditnumber"/>
+	<result column="endday" property="endday"/>
+	<result column="token" property="token"/>
+	<result column="expiry" property="expiry"/>
+	<result column="renzhen_status" property="renzhenStatus"/>
+</resultMap>
+       
+<!-- shop_user_info table all fields -->
+<sql id="Base_Column_List" >
+	 user_id,user_name,user_integral,user_tel,user_wechat,user_sex,user_profession,user_age,buy_time,create_time,user_openid,is_member,user_wedding,user_love,user_icon,user_deaddress,user_idcard,user_bname,user_creditnumber,endday,token,expiry,renzhen_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.userName != null and condition.userName != ''" >
+	    and user_name =  #{condition.userName}
+	</if>
+	<if test="condition.userIntegral != null and condition.userIntegral != ''" >
+	    and user_integral =  #{condition.userIntegral}
+	</if>
+	<if test="condition.userTel != null and condition.userTel != ''" >
+	    and user_tel =  #{condition.userTel}
+	</if>
+	<if test="condition.userWechat != null and condition.userWechat != ''" >
+	    and user_wechat =  #{condition.userWechat}
+	</if>
+	<if test="condition.userSex != null and condition.userSex != ''" >
+	    and user_sex =  #{condition.userSex}
+	</if>
+	<if test="condition.userProfession != null and condition.userProfession != ''" >
+	    and user_profession =  #{condition.userProfession}
+	</if>
+	<if test="condition.userAge != null and condition.userAge != ''" >
+	    and user_age =  #{condition.userAge}
+	</if>
+	<if test="condition.buyTime != null and condition.buyTime != ''" >
+	    and buy_time =  #{condition.buyTime}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.userOpenid != null and condition.userOpenid != ''" >
+	    and user_openid =  #{condition.userOpenid}
+	</if>
+	<if test="condition.isMember != null and condition.isMember != ''" >
+	    and is_member =  #{condition.isMember}
+	</if>
+	<if test="condition.userWedding != null and condition.userWedding != ''" >
+	    and user_wedding =  #{condition.userWedding}
+	</if>
+	<if test="condition.userLove != null and condition.userLove != ''" >
+	    and user_love =  #{condition.userLove}
+	</if>
+	<if test="condition.userIcon != null and condition.userIcon != ''" >
+	    and user_icon =  #{condition.userIcon}
+	</if>
+	<if test="condition.userDeaddress != null and condition.userDeaddress != ''" >
+	    and user_deaddress =  #{condition.userDeaddress}
+	</if>
+	<if test="condition.userIdcard != null and condition.userIdcard != ''" >
+	    and user_idcard =  #{condition.userIdcard}
+	</if>
+	<if test="condition.userBname != null and condition.userBname != ''" >
+	    and user_bname =  #{condition.userBname}
+	</if>
+	<if test="condition.userCreditnumber != null and condition.userCreditnumber != ''" >
+	    and user_creditnumber =  #{condition.userCreditnumber}
+	</if>
+	<if test="condition.endday != null and condition.endday != ''" >
+	    and endday =  #{condition.endday}
+	</if>
+	<if test="condition.token != null and condition.token != ''" >
+	    and token =  #{condition.token}
+	</if>
+	<if test="condition.expiry != null and condition.expiry != ''" >
+	    and expiry =  #{condition.expiry}
+	</if>
+	<if test="condition.renzhenStatus != null and condition.renzhenStatus != ''" >
+	    and renzhen_status =  #{condition.renzhenStatus}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_user_info(user_id,user_name,user_integral,user_tel,user_wechat,user_sex,user_profession,user_age,buy_time,create_time,user_openid,is_member,user_wedding,user_love,user_icon,user_deaddress,user_idcard,user_bname,user_creditnumber,endday,token,expiry,renzhen_status)
+ values(#{userId},#{userName},#{userIntegral},#{userTel},#{userWechat},#{userSex},#{userProfession},#{userAge},#{buyTime},now(),#{userOpenid},#{isMember},#{userWedding},#{userLove},#{userIcon},#{userDeaddress},#{userIdcard},#{userBname},#{userCreditnumber},#{endday},#{token},#{expiry},#{renzhenStatus})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_user_info set user_name=#{userName},user_integral=#{userIntegral},user_tel=#{userTel},user_wechat=#{userWechat},user_sex=#{userSex},user_profession=#{userProfession},user_age=#{userAge},buy_time=#{buyTime},create_time=now(),user_openid=#{userOpenid},is_member=#{isMember},user_wedding=#{userWedding},user_love=#{userLove},user_icon=#{userIcon},user_deaddress=#{userDeaddress},user_idcard=#{userIdcard},user_bname=#{userBname},user_creditnumber=#{userCreditnumber},endday=#{endday},token=#{token},expiry=#{expiry},renzhen_status=#{renzhenStatus} where user_id=#{userId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_user_info set 
+	<trim  suffixOverrides="," >
+	<if test="userName != null  ">
+		user_name=#{userName},
+	</if>
+	<if test="userIntegral != null  ">
+		user_integral=#{userIntegral},
+	</if>
+	<if test="userTel != null  ">
+		user_tel=#{userTel},
+	</if>
+	<if test="userWechat != null  ">
+		user_wechat=#{userWechat},
+	</if>
+	<if test="userSex != null  ">
+		user_sex=#{userSex},
+	</if>
+	<if test="userProfession != null  ">
+		user_profession=#{userProfession},
+	</if>
+	<if test="userAge != null  ">
+		user_age=#{userAge},
+	</if>
+	<if test="buyTime != null  ">
+		buy_time=#{buyTime},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="userOpenid != null  ">
+		user_openid=#{userOpenid},
+	</if>
+	<if test="isMember != null  ">
+		is_member=#{isMember},
+	</if>
+	<if test="userWedding != null  ">
+		user_wedding=#{userWedding},
+	</if>
+	<if test="userLove != null  ">
+		user_love=#{userLove},
+	</if>
+	<if test="userIcon != null  ">
+		user_icon=#{userIcon},
+	</if>
+	<if test="userDeaddress != null  ">
+		user_deaddress=#{userDeaddress},
+	</if>
+	<if test="userIdcard != null  ">
+		user_idcard=#{userIdcard},
+	</if>
+	<if test="userBname != null  ">
+		user_bname=#{userBname},
+	</if>
+	<if test="userCreditnumber != null  ">
+		user_creditnumber=#{userCreditnumber},
+	</if>
+	<if test="endday != null  ">
+		endday=#{endday},
+	</if>
+	<if test="token != null  ">
+		token=#{token},
+	</if>
+	<if test="expiry != null  ">
+		expiry=#{expiry},
+	</if>
+	<if test="renzhenStatus != null  ">
+		renzhen_status=#{renzhenStatus},
+	</if>
+	</trim> where user_id=#{userId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_user_info where user_id = #{userId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_user_info where user_id = #{userId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_user_info 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_user_info 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

@@ -1,0 +1,57 @@
+package com.flf.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.base.criteria.Criteria;
+import com.base.service.BaseService;
+import com.flf.entity.ShopOrder;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopOrderService<br>
+ */
+public interface ShopOrderService extends BaseService {
+
+	ShopOrder getOrderByOrderNo(String orderNo);
+
+	List<Map<String, Object>> getOrderTimeByUserId(Criteria criteria);
+
+	List<Map<String, Object>> listAllOrder(ShopOrder orderVo);
+
+	Map<String, Object> saveShopOrder(ShopOrder order, String orderNo);
+	
+	Map<String, Object> saveSaleOrder(ShopOrder order, String orderNo);
+
+
+	Map<String, Object> getOrderInfoById(int orderId);
+
+	int updateExpress(ShopOrder orderVo);
+
+	boolean updateInventoryReduce(ShopOrder orderVo);
+	
+	boolean updateRentInventoryReduce(ShopOrder orderVo);
+
+	void updateCheckOrder(ShopOrder order);
+
+	List<Map<String, Object>> getOrderWearNumber();
+
+	void updateOrderWearingDays(Map<String, Object> map);
+
+	List<Map<String, Object>> getOrderWearNumber(int order_wearNumber);
+
+	void updateOrderStatus(Map<String, Object> map);
+
+	void updateSettlementOrder(String orderNo, Double actualPayment);
+
+	void updateOrderPayStatus(String paymentTarget, Integer rechargeType);
+
+	int isOrderByUserId(int userId);
+
+	int queryOrderByUserId(int userId);
+	
+	XSSFWorkbook exportOrders();
+}

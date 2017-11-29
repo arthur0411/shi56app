@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopAccountMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopUser" >
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="account" property="account"/>
+	<result column="password" property="password"/>
+	<result column="email" property="email"/>
+	<result column="openid" property="openid"/>
+	<result column="head_img" property="headImg"/>
+	<result column="type" property="type"/>
+	<result column="register_time" property="registerTime"/>
+	<result column="last_login_time" property="lastLoginTime"/>
+	<result column="status" property="status"/>
+	<result column="deposit" property="deposit"/>
+	<result column="reductionDays" property="reductionDays"/>
+	<result column="machineNumber" property="machineNumber"/>
+	<result column="phoneModel" property="phoneModel"/>
+	<result column="mobilePhone" property="mobilePhone"/>
+	<result column="balance" property="balance"/>
+	<result column="userVip" property="userVip"/>
+	<result column="user_idcard" property="user_idcard"/>
+	<result column="user_bname" property="user_bname"/>
+	<result column="user_creditnumber" property="user_creditnumber"/>
+	<result column="renzhen_status" property="renzhen_status"/>
+	<result column="mobile" property="mobile"/>
+	<result column="occupation" property="occupation"/>
+	<result column="birthday" property="birthday"/>
+</resultMap>
+       
+<!-- shop_user table all fields -->
+<sql id="Base_Column_List" >
+	 id,name,account,password,email,openid,head_img,type,register_time,last_login_time,status,deposit,reductionDays,
+	 machineNumber,phoneModel,mobilePhone,balance,userVip,user_idcard,user_bname,user_creditnumber,renzhen_status,
+	 mobile,occupation,birthday
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.account != null and condition.account != ''" >
+	    and account =  #{condition.account}
+	</if>
+	<if test="condition.password != null and condition.password != ''" >
+	    and password =  #{condition.password}
+	</if>
+	<if test="condition.email != null and condition.email != ''" >
+	    and email =  #{condition.email}
+	</if>
+	<if test="condition.openid != null and condition.openid != ''" >
+	    and openid =  #{condition.openid}
+	</if>
+	<if test="condition.headImg != null and condition.headImg != ''" >
+	    and head_img =  #{condition.headImg}
+	</if>
+	<if test="condition.type != null and condition.type != ''" >
+	    and type =  #{condition.type}
+	</if>
+	<if test="condition.registerTime != null and condition.registerTime != ''" >
+	    and register_time =  #{condition.registerTime}
+	</if>
+	<if test="condition.lastLoginTime != null and condition.lastLoginTime != ''" >
+	    and last_login_time =  #{condition.lastLoginTime}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.mobilePhone != null and condition.mobilePhone != ''" >
+	    and mobilePhone =  #{condition.mobilePhone}
+	</if>
+</trim>
+</sql>
+
+<select id="queryBalance"  parameterType="Object">
+	select balance 
+	 from shop_user where id = #{id}
+</select>
+   
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_user set balance = balance + #{money}  where id=#{userId}
+ </update>
+ 
+	
+<!-- 提现，清除用户返现为0 -->
+	<update id="updateUserBalance" parameterType="Object">
+		UPDATE shop_user SET balance=balance -200 where id=#{userId} 
+	</update>
+</mapper>   

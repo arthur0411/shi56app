@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopUserMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopUser" >
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="account" property="account"/>
+	<result column="password" property="password"/>
+	<result column="email" property="email"/>
+	<result column="openid" property="openid"/>
+	<result column="head_img" property="headImg"/>
+	<result column="type" property="type"/>
+	<result column="register_time" property="registerTime"/>
+	<result column="last_login_time" property="lastLoginTime"/>
+	<result column="status" property="status"/>
+	<result column="deposit" property="deposit"/>
+	<result column="reductionDays" property="reductionDays"/>
+	<result column="machineNumber" property="machineNumber"/>
+	<result column="phoneModel" property="phoneModel"/>
+	<result column="mobilePhone" property="mobilePhone"/>
+	<result column="balance" property="balance"/>
+	<result column="userVip" property="userVip"/>
+	<result column="user_idcard" property="user_idcard"/>
+	<result column="user_bname" property="user_bname"/>
+	<result column="user_creditnumber" property="user_creditnumber"/>
+	<result column="renzhen_status" property="renzhen_status"/>
+	<result column="mobile" property="mobile"/>
+	<result column="occupation" property="occupation"/>
+	<result column="birthday" property="birthday"/>
+</resultMap>
+       
+<!-- shop_user table all fields -->
+<sql id="Base_Column_List" >
+	 id,name,account,password,email,openid,head_img,type,register_time,last_login_time,status,deposit,reductionDays,
+	 machineNumber,phoneModel,mobilePhone,balance,userVip,user_idcard,user_bname,user_creditnumber,renzhen_status,
+	 mobile,occupation,birthday
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.account != null and condition.account != ''" >
+	    and account =  #{condition.account}
+	</if>
+	<if test="condition.password != null and condition.password != ''" >
+	    and password =  #{condition.password}
+	</if>
+	<if test="condition.email != null and condition.email != ''" >
+	    and email =  #{condition.email}
+	</if>
+	<if test="condition.openid != null and condition.openid != ''" >
+	    and openid =  #{condition.openid}
+	</if>
+	<if test="condition.headImg != null and condition.headImg != ''" >
+	    and head_img =  #{condition.headImg}
+	</if>
+	<if test="condition.type != null and condition.type != ''" >
+	    and type =  #{condition.type}
+	</if>
+	<if test="condition.registerTime != null and condition.registerTime != ''" >
+	    and register_time =  #{condition.registerTime}
+	</if>
+	<if test="condition.lastLoginTime != null and condition.lastLoginTime != ''" >
+	    and last_login_time =  #{condition.lastLoginTime}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.mobilePhone != null and condition.mobilePhone != ''" >
+	    and mobilePhone =  #{condition.mobilePhone}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_user(id,name,account,password,email,openid,head_img,type,register_time,last_login_time,status,deposit,reductionDays,machineNumber,phoneModel,mobilePhone,
+  balance,userVip,user_idcard,user_bname,user_creditnumber,renzhen_status,mobile,occupation,birthday)
+ values(#{id},#{name},#{account},#{password},#{email},#{openid},#{headImg},#{type},#{registerTime},#{lastLoginTime},#{status},#{deposit},#{reductionDays},#{machineNumber},#{phoneModel}
+ ,#{mobilePhone},#{balance},#{userVip},#{user_idcard},#{user_bname},#{user_creditnumber},#{renzhen_status},#{mobile},#{occupation},#{birthday})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_user set name=#{name},account=#{account},password=#{password},email=#{email},openid=#{openid},
+  head_img=#{headImg},type=#{type},register_time=#{registerTime},last_login_time=#{lastLoginTime},status=#{status} 
+  ,deposit=#{deposit},reductionDays=#{reductionDays} ,mobilePhone=#{mobilePhone},mobilePhone=#{mobilePhone} ,userVip=#{userVip}  where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_user set 
+	<trim  suffixOverrides="," >
+	<if test="name != null  ">
+		name=#{name},
+	</if>
+	<if test="account != null  ">
+		account=#{account},
+	</if>
+	<if test="password != null  ">
+		password=#{password},
+	</if>
+	<if test="email != null  ">
+		email=#{email},
+	</if>
+	<if test="openid != null  ">
+		openid=#{openid},
+	</if>
+	<if test="headImg != null  ">
+		head_img=#{headImg},
+	</if>
+	<if test="type != null  ">
+		type=#{type},
+	</if>
+	<if test="registerTime != null  ">
+		register_time=#{registerTime},
+	</if>
+	<if test="lastLoginTime != null  ">
+		last_login_time=#{lastLoginTime},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+
+	<if test="reductionDays != null  ">
+		reductionDays=#{reductionDays},
+	</if>
+	<if test="machineNumber != null  ">
+		machineNumber=#{machineNumber},
+	</if>
+	<if test="phoneModel != null  ">
+		phoneModel=#{phoneModel},
+	</if>
+	<if test="userVip != null  ">
+		userVip=#{userVip},
+	</if>
+	<if test="user_idcard != null  ">
+		user_idcard=#{user_idcard},
+	</if>
+	<if test="user_bname != null  ">
+		user_bname=#{user_bname},
+	</if>
+	<if test="user_creditnumber != null  ">
+		user_creditnumber=#{user_creditnumber},
+	</if>
+	<if test="renzhen_status != null  ">
+		renzhen_status=#{renzhen_status},
+	</if>
+	<if test="mobile != null  ">
+		mobile=#{mobile},
+	</if>
+	<if test="occupation != null  ">
+		occupation=#{occupation},
+	</if>
+	<if test="birthday != null  ">
+		birthday=#{birthday},
+	</if>
+	
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_user where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_user where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_user 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_user 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+  	<select id="listPage"  resultType="java.util.HashMap"   parameterType="Object">
+		select su.*,sv.vip_name as vipName from shop_user su left join shop_vip sv on su.userVip = sv.vip_id where 1=1 
+		<if test="name != null  and name != ''">
+			and su.name=#{name}
+		</if>
+		<if test="mobilePhone != null  and mobilePhone != ''">
+			and su.mobilePhone=#{mobilePhone}
+		</if>
+			order by id desc
+	</select>
+	
+	
+	 <select id="queryShopUserInfoById"  resultType="java.util.HashMap" parameterType="Object">
+		select su.*,sv.vip_name as vipName from shop_user su left join shop_vip 
+		sv on su.userVip = sv.vip_id where id=#{id} order by id desc
+	</select>
+	
+  	<update id="updateUserMoneyByRecharge" parameterType="Object">
+		UPDATE shop_user SET balance = balance + #{balance} WHERE id=#{id}
+	</update>
+	
+	  <update id="updateUserDepositByRecharge" parameterType="Object">
+		UPDATE shop_user SET deposit = deposit + #{deposit},status=1,userVip=#{userVip} WHERE id=#{id}
+	</update>
+	
+	
+	  <update id="updateUserStatus" parameterType="Integer">
+		UPDATE shop_user SET status = 1  WHERE id=#{id}
+	</update>
+	
+	
+<!-- 退押金，清除用户押金为0 -->
+	<update id="updateUserMoney" parameterType="Object">
+		UPDATE shop_user SET deposit =0,userVip=0,status=0 where id=#{userId} 
+	</update>
+	
+
+<select id="exportUsers" parameterType="Object" resultType="java.util.HashMap">
+	SELECT id,name,mobilePhone,register_time,deposit,reductionDays,balance,machineNumber,phoneModel,last_login_time,status,userVip
+	FROM shop_user 
+	order by id desc    
+</select>
+	
+</mapper>   

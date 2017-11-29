@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopShouhouMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopShouhou" >
+	<result column="id" property="id"/>
+	<result column="user_id" property="userId"/>
+	<result column="order_id" property="orderId"/>
+	<result column="type" property="type"/>
+	<result column="content" property="content"/>
+	<result column="img" property="img"/>
+	<result column="create_time" property="createTime"/>
+	<result column="order_code" property="orderCode"/>
+	<result column="comp_num" property="compNum"/>
+	<result column="phone" property="phone"/>
+	<result column="name" property="name"/>
+	<result column="address" property="address"/>
+	<result column="status" property="status"/>
+	<result column="is_die" property="isDie"/>
+</resultMap>
+       
+<!-- shop_shouhou table all fields -->
+<sql id="Base_Column_List" >
+	 id,user_id,order_id,type,content,img,create_time,order_code,comp_num,phone,name,address,status,is_die
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.orderId != null and condition.orderId != ''" >
+	    and order_id =  #{condition.orderId}
+	</if>
+	<if test="condition.type != null and condition.type != ''" >
+	    and type =  #{condition.type}
+	</if>
+	<if test="condition.content != null and condition.content != ''" >
+	    and content =  #{condition.content}
+	</if>
+	<if test="condition.img != null and condition.img != ''" >
+	    and img =  #{condition.img}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.orderCode != null and condition.orderCode != ''" >
+	    and order_code =  #{condition.orderCode}
+	</if>
+	<if test="condition.compNum != null and condition.compNum != ''" >
+	    and comp_num =  #{condition.compNum}
+	</if>
+	<if test="condition.phone != null and condition.phone != ''" >
+	    and phone =  #{condition.phone}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.address != null and condition.address != ''" >
+	    and address =  #{condition.address}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.isDie != null and condition.isDie != ''" >
+	    and is_die =  #{condition.isDie}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_shouhou(id,user_id,order_id,type,content,img,create_time,order_code,comp_num,phone,name,address,status,is_die)
+ values(#{id},#{userId},#{orderId},#{type},#{content},#{img},now(),#{orderCode},#{compNum},#{phone},#{name},#{address},#{status},#{isDie})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_shouhou set user_id=#{userId},order_id=#{orderId},type=#{type},content=#{content},img=#{img},create_time=now(),order_code=#{orderCode},comp_num=#{compNum},phone=#{phone},name=#{name},address=#{address},status=#{status},is_die=#{isDie} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_shouhou set 
+	<trim  suffixOverrides="," >
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="orderId != null  ">
+		order_id=#{orderId},
+	</if>
+	<if test="type != null  ">
+		type=#{type},
+	</if>
+	<if test="content != null  ">
+		content=#{content},
+	</if>
+	<if test="img != null  ">
+		img=#{img},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="orderCode != null  ">
+		order_code=#{orderCode},
+	</if>
+	<if test="compNum != null  ">
+		comp_num=#{compNum},
+	</if>
+	<if test="phone != null  ">
+		phone=#{phone},
+	</if>
+	<if test="name != null  ">
+		name=#{name},
+	</if>
+	<if test="address != null  ">
+		address=#{address},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="isDie != null  ">
+		is_die=#{isDie},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_shouhou where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_shouhou where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_shouhou 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_shouhou 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

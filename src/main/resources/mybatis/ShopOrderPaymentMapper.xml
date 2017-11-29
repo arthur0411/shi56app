@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopOrderPaymentMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopOrderPayment" >
+	<result column="id" property="id"/>
+	<result column="orderNo" property="orderNo"/>
+	<result column="rechargeId" property="rechargeId"/>
+</resultMap>
+       
+<!-- shop_order_payment table all fields -->
+<sql id="Base_Column_List" >
+	 id,orderNo,rechargeId
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.orderNo != null and condition.orderNo != ''" >
+	    and orderNo =  #{condition.orderNo}
+	</if>
+	<if test="condition.rechargeId != null and condition.rechargeId != ''" >
+	    and rechargeId =  #{condition.rechargeId}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_order_payment(id,orderNo,rechargeId)
+ values(#{id},#{orderNo},#{rechargeId})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_order_payment set orderNo=#{orderNo},rechargeId=#{rechargeId} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_order_payment set 
+	<trim  suffixOverrides="," >
+	<if test="orderNo != null  ">
+		orderNo=#{orderNo},
+	</if>
+	<if test="rechargeId != null  ">
+		rechargeId=#{rechargeId},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_order_payment where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_order_payment where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_order_payment 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_order_payment 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="getCount" parameterType="ShopOrderPayment" resultType="Integer">
+		SELECT COUNT(*) FROM shop_order_payment op
+		WHERE op.`orderNo` = #{orderNo} AND op.`rechargeId` = #{rechargeId}
+	</select>
+  	
+  	<select id="list" resultType="ShopOrderPaymentVo" parameterType="ShopOrderPaymentVo">
+		SELECT
+			o.`orderNo`, o.`mobilePhone`, o.`paymentWay`, o.`order_status` as  orderStatus , o.`paymentTime`, 
+			o.`actualPayment` as actualPayment,
+			(SELECT r.`bankNo` FROM shop_recharge r WHERE r.`id` = op.`rechargeId`) tradeNo
+		FROM (
+			SELECT o.`order_id`, o.`order_nummmm` as orderNo, o.`paymentWay`,o.`actualPayment`,
+				o.is_payment as order_status,o.`paymentTime`, u.mobilePhone
+			FROM shop_order o
+			LEFT JOIN shop_user u ON u.`id` = o.`user_id`
+			WHERE 1=1
+			<if test="paymentWay != null and paymentWay != ''">
+				AND o.`paymentWay` = #{paymentWay}
+			</if>
+			<if test="orderStatus != null and orderStatus != ''">
+					AND o.`is_payment` = #{orderStatus}
+			</if>
+			
+			<if test="mobilePhone != null and mobilePhone != ''">
+				AND u.`mobilePhone` = #{mobilePhone}
+			</if>
+			<if test="orderNo != null and orderNo != ''">
+				AND o.`order_nummmm` = #{orderNo}
+			</if>
+			<if test="dateStart != null and dateStart != ''">
+				<if test="dateEnd != null and dateEnd != ''">
+					AND o.`paymentTime` BETWEEN #{dateStart} AND #{dateEnd}
+				</if>
+			</if>
+			ORDER BY o.`order_id` DESC LIMIT #{page.currentResult},#{page.showCount}
+		) AS o
+		LEFT JOIN shop_order_payment op ON op.`orderNo` = o.`orderNo`
+	</select>
+	
+</mapper>   

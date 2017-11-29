@@ -1,0 +1,31 @@
+package com.flf.controller.app;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * APP共享功能
+ * 
+ * @author SevenWong<br>
+ * @date 2016年6月21日下午5:08:50
+ */
+@Controller
+public class PromotionController {
+
+	/**
+	 * APP分享链接
+	 * 
+	 * @author SevenWong<br>
+	 * @date 2016年6月30日下午5:34:02
+	 * @param community
+	 * @return
+	 */
+	@RequestMapping(value = "/promotion")
+	public ModelAndView share() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/mobile/share");
+		return mv;
+	}
+
+}

@@ -1,0 +1,171 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>商品管理</title>
+<link href="../../style/css/public.css?v=20161223" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../../style/js/jquery.min.js"></script>
+<script type="text/javascript" src="../../style/js/global.js"></script>
+</head>
+<body style="background-color: #FFFFFF;">
+	<div class="mainBox">
+		<h3>
+		<a href="/commodity/add.html" class="actionBtn add">添加商品</a>商品管理
+		
+		</h3>
+		<form action="/commodity/list.html" method="post" name="searchForm" id="searchForm">
+			<div class="filter">
+	
+				<select name="commodityTagId" id="commodityTagId">
+					<option value="">商品分类</option>
+					<c:forEach items="${commodityTagList}" var="list">
+						<option value="${list.tag_id }" <c:if test="${vo.commodityTagId==list.tag_id}"> selected </c:if> >${list.tag_name }</option>
+					</c:forEach>
+				</select>
+		
+				<select name="isUpjia" id="isUpjia" style="margin-right: 15px;">
+					<option value="">是否上架</option>
+					<option value="no" <c:if test="${vo.isUpjia=='no'}">selected</c:if>>否</option>
+					<option value="yes" <c:if test="${vo.isUpjia=='yes'}">selected</c:if>>是</option>
+				</select>
+
+				<select name="isPresale" style="margin-right: 15px;">
+					<option value="">是否预售</option>
+					<option value="no" <c:if test="${vo.isPresale=='no'}">selected</c:if>>否</option>
+					<option value="yes" <c:if test="${vo.isPresale=='yes'}">selected</c:if>>是</option>
+				</select>
+				
+				<select name="isRecommend" style="margin-right: 15px;">
+					<option value="">是否推荐</option>
+					<option value="no" <c:if test="${vo.isRecommend=='no'}">selected</c:if>>否</option>
+					<option value="yes" <c:if test="${vo.isRecommend=='yes'}">selected</c:if>>是</option>
+				</select>
+				
+				
+				<select name="dealWay" style="margin-right: 15px;">
+					<option value="">可交易方式</option>
+					<option value="1" <c:if test="${vo.dealWay=='1'}">selected</c:if>>只可售</option>
+					<option value="2" <c:if test="${vo.dealWay=='2'}">selected</c:if>>可租可售</option>
+				</select>
+
+			</div>
+		
+			<div class="filter">
+				商品搜索：<input type="text" class="inpMain" placeholder="商品名称 / 商品编号" name="commodityName" id="commodityName"
+					value="${vo.commodityName }" />
+				<input class="btn" type="submit" value="搜索" />
+			</div>
+
+		</form>
+		
+		<div id="list">
+			<form name="deleteForm" id="deleteForm">
+				<table style="width: 100%;" class="tableBasic list">
+					<tr>
+						<th>ID</th>
+						<th>交易方式</th>
+						<th>商品名称</th>
+						<th>商品封面图片</th> 
+						<th>商品价格</th>
+						<th>日租金</th>
+						<th>商品分类</th>
+						<th>是否预售</th>
+						<th>是否上架</th>
+						<th>是否推荐</th> 
+						<th>创建时间</th>
+						<th>修改时间</th>
+						<th>商品参数</th>
+						<th>商品库存</th>
+						<th>商品销量</th>
+						<th>操作</th>
+					</tr>
+					<c:choose>
+						<c:when test="${not empty commodityList}">
+							<c:forEach items="${commodityList}" var="list" varStatus="vs">
+								<tr class="main_info">
+									<td>${list.commodity_id }</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.dealWay == '1' }">只可售</c:when>
+											<c:when test="${list.dealWay == '2' }">可租可售</c:when>
+										</c:choose>
+									</td>
+									<td>${list.commodity_name }</td>
+									<td><img width="50px;" height="50px;" src="${list.icon }"></td>
+									<td>${list.commodity_price }</td>
+									<td>${list.goldenRent }</td>
+									<td>${list.tag_name }</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.is_presale == 'yes' }">是</c:when>
+											<c:when test="${list.is_presale == 'no' }">否</c:when>
+										</c:choose>
+									</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.is_upjia == 'yes' }">是</c:when>
+											<c:when test="${list.is_upjia == 'no' }">否</c:when>
+											<c:otherwise>未知</c:otherwise>
+										</c:choose>
+									</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.is_recommend == 'yes' }">是</c:when>
+											<c:when test="${list.is_recommend == 'no' }">否</c:when>
+											<c:otherwise>未知</c:otherwise>
+										</c:choose>
+									</td>
+									<td>${list.create_time }</td>
+									<td>${list.down_time }</td>
+						
+									<td>
+										${list.commodity_parameter}
+									</td>
+									<td>${list.commodity_stock }</td>
+									<td>${list.commodity_hot }</td>
+								
+									
+									<td>
+										<a href="/commodity/edit.html?id=${list.commodity_id }">编辑</a>&nbsp; 
+										
+									</td>
+								</tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr class="main_info">
+								<td colspan="5">暂无数据</td>
+							</tr>
+						</c:otherwise>
+					</c:choose>
+				</table>
+			</form>
+		</div>
+		<div class="clear"></div>
+		<div class="page_and_btn">${vo.page.pageStr }</div>
+	</div>
+
+	<script type="text/javascript">
+		$(function() {
+			// 选中左侧相应的菜单
+			activeMenu('商品运营');
+		});
+		
+		
+		//|&nbsp;<a href="javascript:delCommodityTag(${list.commodity_id });">删除</a> 
+		function delCommodityTag(vid){
+			if(confirm("确定要删除该记录？谨慎操作！")){
+				var url = "/commodity/delete.html?id="+vid;
+				$.get(url,function(data){
+					if(data=="success"){
+						document.location.reload();
+					}
+				});
+			}
+		}
+	</script>
+</body>
+</html>

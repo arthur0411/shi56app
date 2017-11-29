@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+<classPathEntry location="D:\repositories\maven\mysql\mysql-connector-java\5.1.34\mysql-connector-java-5.1.34.jar"/>
+  <context id="context1">
+    <jdbcConnection connectionURL="jdbc:mysql://120.77.81.97:3306/jewelry?Unicode=true&amp;characterEncoding=UTF-8" driverClass="com.mysql.jdbc.Driver" password="shiwuliupwd" userId="root" />
+    <javaModelGenerator targetPackage="com.flf.entity" targetProject="shiwuliu/src/main/java" />
+    <sqlMapGenerator targetPackage="mybatis" targetProject="shiwuliu/src/main/resources" />
+    <javaClientGenerator targetPackage="com.flf.mapper" targetProject="shiwuliu/src/main/java" type="XMLMAPPER" />
+    <table schema="jewelry" tableName="shop_commodity_sku">
+    </table>
+  </context>
+</generatorConfiguration>

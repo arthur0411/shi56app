@@ -1,0 +1,117 @@
+package com.flf.entity;
+
+import java.util.List;
+
+import com.base.entity.BaseEntity;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopIdleEntity<br>
+ */
+public class ShopIdle extends BaseEntity {
+
+	private java.lang.Integer id;//
+	private java.lang.String brand;// 品牌
+	private java.lang.String newInfo;// 新旧程度（9成新 8成新）
+	private java.lang.String material;// 材质
+	private java.lang.Integer userId;// 用户id
+	private java.lang.String createTime;// 提交时间
+	private java.lang.Integer auditStatus;// 审核状态（1未审核2审核通过3审核失败）
+	private java.lang.String evaluationValue;// 评估价值
+
+	private String mobilePhone;
+
+	private List<ShopIdlePic> ShopIdlePicList;// 图片列表
+
+	private Page page; // 分页
+
+	public java.lang.Integer getId() {
+		return this.id;
+	}
+
+	public void setId(java.lang.Integer id) {
+		this.id = id;
+	}
+
+	public java.lang.String getBrand() {
+		return this.brand;
+	}
+
+	public void setBrand(java.lang.String brand) {
+		this.brand = brand;
+	}
+
+	public java.lang.String getNewInfo() {
+		return this.newInfo;
+	}
+
+	public void setNewInfo(java.lang.String newInfo) {
+		this.newInfo = newInfo;
+	}
+
+	public java.lang.String getMaterial() {
+		return this.material;
+	}
+
+	public void setMaterial(java.lang.String material) {
+		this.material = material;
+	}
+
+	public java.lang.Integer getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(java.lang.Integer userId) {
+		this.userId = userId;
+	}
+
+	public java.lang.String getCreateTime() {
+		return this.createTime;
+	}
+
+	public void setCreateTime(java.lang.String createTime) {
+		this.createTime = createTime;
+	}
+
+	public java.lang.Integer getAuditStatus() {
+		return this.auditStatus;
+	}
+
+	public void setAuditStatus(java.lang.Integer auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	public java.lang.String getEvaluationValue() {
+		return this.evaluationValue;
+	}
+
+	public void setEvaluationValue(java.lang.String evaluationValue) {
+		this.evaluationValue = evaluationValue;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+	public Page getPage() {
+		return page;
+	}
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+	public List<ShopIdlePic> getShopIdlePicList() {
+		return ShopIdlePicList;
+	}
+
+	public void setShopIdlePicList(List<ShopIdlePic> shopIdlePicList) {
+		ShopIdlePicList = shopIdlePicList;
+	}
+
+}

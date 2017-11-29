@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopIdleMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopIdle" >
+	<result column="id" property="id"/>
+	<result column="brand" property="brand"/>
+	<result column="newInfo" property="newInfo"/>
+	<result column="material" property="material"/>
+	<result column="userId" property="userId"/>
+	<result column="createTime" property="createTime"/>
+	<result column="auditStatus" property="auditStatus"/>
+	<result column="evaluationValue" property="evaluationValue"/>
+</resultMap>
+       
+<!-- shop_idle table all fields -->
+<sql id="Base_Column_List" >
+	 id,brand,newInfo,material,userId,createTime,auditStatus,evaluationValue
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.brand != null and condition.brand != ''" >
+	    and brand =  #{condition.brand}
+	</if>
+	<if test="condition.newInfo != null and condition.newInfo != ''" >
+	    and newInfo =  #{condition.newInfo}
+	</if>
+	<if test="condition.material != null and condition.material != ''" >
+	    and material =  #{condition.material}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and userId =  #{condition.userId}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and createTime =  #{condition.createTime}
+	</if>
+	<if test="condition.auditStatus != null and condition.auditStatus != ''" >
+	    and auditStatus =  #{condition.auditStatus}
+	</if>
+	<if test="condition.evaluationValue != null and condition.evaluationValue != ''" >
+	    and evaluationValue =  #{condition.evaluationValue}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_idle(id,brand,newInfo,material,userId,createTime,auditStatus,evaluationValue)
+ values(#{id},#{brand},#{newInfo},#{material},#{userId},now(),#{auditStatus},#{evaluationValue})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_idle set brand=#{brand},newInfo=#{newInfo},material=#{material},userId=#{userId},auditStatus=#{auditStatus},evaluationValue=#{evaluationValue} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_idle set 
+	<trim  suffixOverrides="," >
+	<if test="brand != null  ">
+		brand=#{brand},
+	</if>
+	<if test="newInfo != null  ">
+		newInfo=#{newInfo},
+	</if>
+	<if test="material != null  ">
+		material=#{material},
+	</if>
+	<if test="userId != null  ">
+		userId=#{userId},
+	</if>
+	<if test="createTime != null  ">
+		createTime=#{createTime},
+	</if>
+	<if test="auditStatus != null  ">
+		auditStatus=#{auditStatus},
+	</if>
+	<if test="evaluationValue != null  ">
+		evaluationValue=#{evaluationValue},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_idle where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_idle where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_idle 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_idle 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="listPage" parameterType="Object" resultType="java.util.HashMap">
+		SELECT * FROM shop_idle si left join shop_user su on si.userId = su.id
+		WHERE 1=1
+		<if test="mobilePhone != null">
+			AND su.mobilePhone = #{mobilePhone}
+		</if>
+		ORDER BY si.id DESC
+	</select>
+	
+	
+ <update id="updateAuditStatus" parameterType="Object" >
+  	update shop_idle set auditStatus=#{auditStatus} where id=#{id}
+ </update>
+  	
+</mapper>   

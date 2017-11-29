@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopIdleMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopIdle" >
+	<result column="id" property="id"/>
+	<result column="user_id" property="userId"/>
+	<result column="brand" property="brand"/>
+	<result column="material" property="material"/>
+	<result column="catagory" property="catagory"/>
+	<result column="use_years" property="useYears"/>
+	<result column="status" property="status"/>
+	<result column="panoramic_pic" property="panoramicPic"/>
+	<result column="part_pic" property="partPic"/>
+	<result column="voucher_pic" property="voucherPic"/>
+	<result column="create_time" property="createTime"/>
+	<result column="mobile" property="mobile"/>
+	<result column="order_num" property="orderNum"/>
+	<result column="express" property="express"/>
+	<result column="expressCode" property="expressCode"/>
+	<result column="returnExpress" property="returnExpress"/>
+	<result column="returnCode" property="returnCode"/>
+	<result column="residueDay" property="residueDay"/>
+</resultMap>
+       
+<!-- shop_idle table all fields -->
+<sql id="Base_Column_List" >
+	 id,user_id,brand,material,catagory,use_years,status,panoramic_pic,part_pic,voucher_pic,create_time,mobile,order_num,express,expressCode,returnExpress,returnCode,residueDay
+</sql>
+   
+  	<select id="listPage" parameterType="Object" resultType="java.util.HashMap">
+	    select si.* from shop_idle si
+	    left join shop_user su on si.user_id = su.id
+	    where 1=1
+	    <if test="orderNum != null and orderNum != ''" >
+	        and si.order_num  =  #{orderNum}
+	    </if>
+	    <if test="status != null and status != ''" >
+	        and si.status  =  #{status}
+	    </if>
+	    <if test="catagory != null and catagory != ''">
+	        and si.catagory = #{catagory}
+	    </if>
+		<if test="mobile != null and mobile != ''">
+	        and si.mobile = #{mobile}
+	    </if>
+	    order by si.id desc
+	</select>
+	
+	<select id="getIdleCount" parameterType="Object" resultType="java.lang.Integer" >
+		select count(*) from shop_idle where user_id = #{userId} and status in (0,1)
+	</select>
+	
+	<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+		select <include refid="Base_Column_List" /> 
+		 from shop_idle where id = #{id}
+	</select>
+	
+	<select id="getOrderTimeByUserId" parameterType="Object" resultType="java.util.HashMap">
+		SELECT *
+		FROM shop_idle WHERE user_id=#{userId}
+	     ORDER BY id DESC
+	</select>
+
+	<insert id="saveShopIdle" parameterType="Object" >
+	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+		SELECT LAST_INSERT_ID()
+	  </selectKey>
+	  insert into shop_idle(id,user_id,brand,material,catagory,use_years,status,panoramic_pic,part_pic,voucher_pic,create_time,mobile,order_num)
+	 values(#{id},#{userId},#{brand},#{material},#{catagory},#{useYears},#{status},#{panoramicPic},#{partPic},#{voucherPic},#{createTime},#{mobile},#{orderNum})
+	</insert>
+
+	<update id="changeStatus" parameterType="Object">
+		UPDATE shop_idle SET status = #{status} where id = #{id}
+	</update>
+	
+	
+	<update id="updateBySelective" parameterType="Object" >
+		update shop_idle set 
+		<trim  suffixOverrides="," >
+		<if test="userId != null  ">
+			user_id=#{userId},
+		</if>
+		<if test="brand != null  ">
+			brand=#{brand},
+		</if>
+		<if test="material != null  ">
+			material=#{material},
+		</if>
+		<if test="catagory != null  ">
+			catagory=#{catagory},
+		</if>
+		<if test="useYears != null  ">
+			use_years=#{useYears},
+		</if>
+		<if test="status != null  ">
+			status=#{status},
+		</if>
+		<if test="panoramicPic != null  ">
+			panoramic_pic=#{panoramicPic},
+		</if>
+		<if test="partPic != null  ">
+			part_pic=#{partPic},
+		</if>
+		<if test="voucherPic != null  ">
+			voucher_pic=#{voucherPic},
+		</if>
+		<if test="createTime != null  ">
+			create_time=#{createTime},
+		</if>
+		<if test="mobile != null  ">
+			mobile=#{mobile},
+		</if>
+		<if test="orderNum != null  ">
+			order_num=#{orderNum},
+		</if>
+		<if test="express != null  ">
+			express=#{express},
+		</if>
+		<if test="expressCode != null  ">
+			expressCode=#{expressCode},
+		</if>
+		<if test="returnExpress != null  ">
+			returnExpress=#{returnExpress},
+		</if>
+		<if test="returnCode != null  ">
+			returnCode=#{returnCode},
+		</if>
+		<if test="residueDay != null  ">
+			residueDay=#{residueDay},
+		</if>
+		</trim> where id=#{id}
+	</update>
+
+</mapper>   

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopWishListMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopWishList" >
+	<result column="id" property="id"/>
+	<result column="commodityNo" property="commodityNo"/>
+	<result column="userId" property="userId"/>
+	<result column="createTime" property="createTime"/>
+	<result column="status" property="status"/>
+</resultMap>
+       
+<!-- shop_wish_list table all fields -->
+<sql id="Base_Column_List" >
+	 id,commodityNo,userId,createTime,status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.commodityNo != null and condition.commodityNo != ''" >
+	    and commodityNo =  #{condition.commodityNo}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and userId =  #{condition.userId}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and createTime =  #{condition.createTime}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_wish_list(id,commodityNo,userId,createTime,status)
+ values(#{id},#{commodityNo},#{userId},now(),#{status})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_wish_list set commodityNo=#{commodityNo},userId=#{userId},status=#{status} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_wish_list set 
+	<trim  suffixOverrides="," >
+	<if test="commodityNo != null  ">
+		commodityNo=#{commodityNo},
+	</if>
+	<if test="userId != null  ">
+		userId=#{userId},
+	</if>
+	<if test="createTime != null  ">
+		createTime=#{createTime},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_wish_list where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_wish_list where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_wish_list 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_wish_list 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="listPage" parameterType="Object" resultType="java.util.HashMap">
+		SELECT sc.*,su.mobilePhone,swl.createTime,swl.id FROM shop_wish_list swl LEFT JOIN shop_commodity sc 
+		ON sc.commodity_id = swl.commodityNo LEFT JOIN shop_user su ON su.id = swl.userId WHERE 1=1 
+		<if test="mobilePhone != null">
+			AND su.mobilePhone = #{mobilePhone}
+		</if>
+		ORDER BY swl.id DESC
+	</select>
+	
+	<select id="getWishListByUserId" resultType="java.util.HashMap" parameterType="Integer">
+		select sc.*   <choose>
+                <when test="condition.userId != null and condition.userId != ''">
+                      ,(SELECT COUNT(id) FROM shop_wish_list WHERE STATUS=1 
+				   	  and userId =  #{condition.userId}
+				      AND commodityNo= sc.commodity_id  ) AS iswish 
+                </when>
+                <otherwise>
+                       ,0 AS iswish 
+                 </otherwise>
+         </choose>  ,sct.tag_name  from shop_commodity sc left join shop_wish_list swl on swl.commodityNo = sc.commodity_id
+         left join shop_commodity_tag sct on sct.tag_id = sc.commodity_tag_id 
+		where swl.userId = #{condition.userId } 	ORDER BY swl.id DESC
+		<if test="limitClause != null and limitClause != ''">
+			${limitClause}
+		</if>
+	
+	</select>
+	
+  	<update id="updateWishList" parameterType="Object">
+		delete from shop_wish_list where commodityNo=#{commodityNo} and userId=#{userId}
+	</update>
+</mapper>   

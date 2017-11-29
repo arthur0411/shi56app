@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopCommodityBrandMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopCommodityBrand" >
+	<result column="brand_id" property="brandId" />
+	<result column="brand_name" property="brandName"/>
+	<result column="brand_img" property="brandImg"/>
+	<result column="create_time" property="createTime"/>
+	<result column="update_time" property="updateTime"/>
+	<result column="brand_info" property="brandInfo"/>
+</resultMap>
+       
+<!-- shop_commodity_brand table all fields -->
+<sql id="Base_Column_List" >
+	 brand_id,brand_name,brand_img,create_time,update_time,brand_info
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.brandId != null and condition.brandId != ''" >
+	    and brand_id =  #{condition.brandId}
+	</if>
+	<if test="condition.brandName != null and condition.brandName != ''" >
+	    and brand_name =  #{condition.brandName}
+	</if>
+	<if test="condition.brandImg != null and condition.brandImg != ''" >
+	    and brand_img =  #{condition.brandImg}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.updateTime != null and condition.updateTime != ''" >
+	    and update_time =  #{condition.updateTime}
+	</if>
+	<if test="condition.brandInfo != null and condition.brandInfo != ''" >
+	    and brand_info =  #{condition.brandInfo}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="brandId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_commodity_brand(brand_id,brand_name,brand_img,create_time,update_time,brand_info)
+ values(#{brandId},#{brandName},#{brandImg},now(),'',#{brandInfo})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_commodity_brand set brand_name=#{brandName},brand_img=#{brandImg},create_time=now(),update_time=now(),brand_info=#{brandInfo} where brand_id=#{brandId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_commodity_brand set 
+	<trim  suffixOverrides="," >
+	<if test="brandName != null  ">
+		brand_name=#{brandName},
+	</if>
+	<if test="brandImg != null  ">
+		brand_img=#{brandImg},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="updateTime != null  ">
+		update_time=#{updateTime},
+	</if>
+	<if test="brandInfo != null  ">
+		brand_info=#{brandInfo},
+	</if>
+	</trim> where brand_id=#{brandId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_commodity_brand where brand_id = #{brandId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_commodity_brand where brand_id = #{brandId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_commodity_brand 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_commodity_brand 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="listPage" parameterType="Object" resultType="java.util.HashMap">
+		SELECT * from shop_commodity_brand where 1=1
+		<if test="brandName != null">
+			AND brand_name = #{brandName}
+		</if>
+		ORDER BY brand_id DESC
+	</select>
+	
+	<select id="listAll" resultType="java.util.HashMap">
+		SELECT * from shop_commodity_brand 
+		ORDER BY brand_id DESC
+	</select>
+	
+
+  	<select id="getShopCommodityBrandByName" resultMap="BaseResultMap"  parameterType="String">
+  		SELECT * from shop_commodity_brand where brand_name = #{brandName}
+  	</select>
+  	
+  	  <select id="getCommodityBrandList" resultMap="BaseResultMap" >
+  		SELECT * from shop_commodity_brand 
+  	</select>
+  	
+</mapper>   

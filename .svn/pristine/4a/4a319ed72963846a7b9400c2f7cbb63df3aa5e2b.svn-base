@@ -1,0 +1,55 @@
+package com.flf.service.impl;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.base.service.BaseServiceImpl;
+import com.flf.entity.ShopIdle;
+import com.flf.entity.ShopIdlePic;
+import com.flf.mapper.ShopIdleMapper;
+import com.flf.mapper.ShopIdlePicMapper;
+import com.flf.service.ShopIdleService;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopIdleService<br>
+ */
+@Service("shopIdleService")
+public class ShopIdleServiceImpl extends BaseServiceImpl implements ShopIdleService {
+	private final static Logger log = Logger.getLogger(ShopIdleServiceImpl.class);
+
+	@Autowired
+	private ShopIdleMapper dao;
+
+	@Autowired
+	private ShopIdlePicMapper picdao;
+
+	@Override
+	public ShopIdleMapper getDao() {
+		return dao;
+	}
+
+	public List<ShopIdle> listPage(ShopIdle vo) {
+		return dao.listPage(vo);
+	}
+
+	public void updateAuditStatus(Integer id, int status) {
+		dao.updateAuditStatus(id, status);
+	}
+
+	public int saveShopIdle(ShopIdle shopIdle) {
+		int resultId = dao.add(shopIdle);
+		List<ShopIdlePic> picList = shopIdle.getShopIdlePicList();
+		if (resultId > 0) {
+			for (ShopIdlePic pic : picList) {
+				pic.setIdleId(shopIdle.getId());
+				picdao.add(pic);
+			}
+		}
+		return resultId;
+	}
+}

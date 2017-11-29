@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopWithdrawalsMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopWithdrawals" >
+	<result column="id" property="id"/>
+	<result column="userId" property="userId"/>
+	<result column="wclass" property="wclass"/>
+	<result column="money" property="money"/>
+	<result column="createTime" property="createTime"/>
+	<result column="status" property="status"/>
+	<result column="isConfirm" property="isConfirm"/>
+	<result column="operationTime" property="operationTime"/>
+	<result column="remark" property="remark"/>
+</resultMap>
+       
+<!-- shop_withdrawals table all fields -->
+<sql id="Base_Column_List" >
+	 id,userId,wclass,money,createTime,status,isConfirm,operationTime,remark
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and userId =  #{condition.userId}
+	</if>
+	<if test="condition.wclass != null and condition.wclass != ''" >
+	    and wclass =  #{condition.wclass}
+	</if>
+	<if test="condition.money != null and condition.money != ''" >
+	    and money =  #{condition.money}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and createTime =  #{condition.createTime}
+	</if>
+	<if test="condition.status != null and condition.status != ''" >
+	    and status =  #{condition.status}
+	</if>
+	<if test="condition.isConfirm != null and condition.isConfirm != ''" >
+	    and isConfirm =  #{condition.isConfirm}
+	</if>
+	<if test="condition.operationTime != null and condition.operationTime != ''" >
+	    and operationTime =  #{condition.operationTime}
+	</if>
+	<if test="condition.remark != null and condition.remark != ''" >
+	    and remark =  #{condition.remark}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_withdrawals(id,userId,wclass,money,createTime,status,isConfirm,operationTime,remark)
+ values(#{id},#{userId},#{wclass},#{money},now(),#{status},#{isConfirm},#{operationTime},#{remark})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_withdrawals set userId=#{userId},wclass=#{wclass},money=#{money},status=#{status},isConfirm=#{isConfirm},operationTime=#{operationTime},remark=#{remark} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_withdrawals set 
+	<trim  suffixOverrides="," >
+	<if test="userId != null  ">
+		userId=#{userId},
+	</if>
+	<if test="wclass != null  ">
+		wclass=#{wclass},
+	</if>
+	<if test="money != null  ">
+		money=#{money},
+	</if>
+	<if test="createTime != null  ">
+		createTime=#{createTime},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="isConfirm != null  ">
+		isConfirm=#{isConfirm},
+	</if>
+	<if test="operationTime != null  ">
+		operationTime=#{operationTime},
+	</if>
+	<if test="remark != null  ">
+		remark=#{remark},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_withdrawals where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_withdrawals where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_withdrawals 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_withdrawals 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+  	
+  	
+<select id="listPageAllOrder" parameterType="Object" resultType="java.util.HashMap">
+	SELECT u.id AS userId,w.id,w.wclass,u.mobilePhone,w.money,w.createTime,w.status,w.isConfirm,w.operationTime,w.remark 
+	FROM shop_withdrawals w LEFT JOIN shop_user u ON u.id=w.userId
+	where 1=1 
+	<if test="mobilePhone != null and mobilePhone != ''" >
+	    and u.mobilePhone  =  #{mobilePhone}
+	</if>
+	<if test="status != null and status != ''" >
+	    and w.status  =  #{status}
+	</if>
+	<if test="wclass != null and wclass != ''" >
+	    and w.wclass  =  #{wclass}
+	</if>
+	order by w.id desc    
+</select>
+
+  	
+ <update id="updateWithdrawals" parameterType="Object">
+	update shop_withdrawals set isConfirm = 1 ,status = #{status} ,wclass = #{wclass},remark=#{remark},operationTime=#{operationTime} where id=#{id}
+</update>
+
+
+
+<select id="exportWithdrawals" parameterType="Object" resultType="java.util.HashMap">
+	SELECT u.id AS userId,w.id,w.wclass,u.mobilePhone,w.money,w.createTime,w.status,w.isConfirm,w.operationTime,w.remark 
+	FROM shop_withdrawals w LEFT JOIN shop_user u ON u.id=w.userId
+	where 1=1 
+	<if test="mobilePhone != null and mobilePhone != ''" >
+	    and u.mobilePhone  =  #{mobilePhone}
+	</if>
+	<if test="status != null and status != ''" >
+	    and w.status  =  #{status}
+	</if>
+	order by w.id desc    
+</select>
+</mapper>   

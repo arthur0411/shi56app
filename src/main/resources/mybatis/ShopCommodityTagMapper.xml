@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopCommodityTagMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopCommodityTag" >
+	<result column="tag_id" property="tagId"/>
+	<result column="tag_name" property="tagName"/>
+	<result column="tag_img" property="tagImg"/>
+	<result column="tag_order" property="tagOrder"/>
+	<result column="create_time" property="createTime"/>
+	<result column="update_time" property="updateTime"/>
+	<result column="tag_engilsh" property="tagEngilsh"/>
+</resultMap>
+       
+<!-- shop_commodity_tag table all fields -->
+<sql id="Base_Column_List" >
+	 tag_id,tag_name,tag_img,tag_order,create_time,update_time,tag_engilsh
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.tagId != null and condition.tagId != ''" >
+	    and tag_id =  #{condition.tagId}
+	</if>
+	<if test="condition.tagName != null and condition.tagName != ''" >
+	    and tag_name =  #{condition.tagName}
+	</if>
+	<if test="condition.tagImg != null and condition.tagImg != ''" >
+	    and tag_img =  #{condition.tagImg}
+	</if>
+	<if test="condition.tagOrder != null and condition.tagOrder != ''" >
+	    and tag_order =  #{condition.tagOrder}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.updateTime != null and condition.updateTime != ''" >
+	    and update_time =  #{condition.updateTime}
+	</if>
+	<if test="condition.tagEngilsh != null and condition.tagEngilsh != ''" >
+	    and tag_engilsh =  #{condition.tagEngilsh}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="tagId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_commodity_tag(tag_id,tag_name,tag_img,tag_order,create_time,update_time,tag_engilsh)
+ values(#{tagId},#{tagName},#{tagImg},#{tagOrder},now(),now(),#{tagEngilsh})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_commodity_tag set tag_name=#{tagName},tag_img=#{tagImg},tag_order=#{tagOrder},create_time=now(),update_time=now(),tag_engilsh=#{tagEngilsh} where tag_id=#{tagId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_commodity_tag set 
+	<trim  suffixOverrides="," >
+	<if test="tagName != null  ">
+		tag_name=#{tagName},
+	</if>
+	<if test="tagImg != null  ">
+		tag_img=#{tagImg},
+	</if>
+	<if test="tagOrder != null  ">
+		tag_order=#{tagOrder},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="updateTime != null  ">
+		update_time=#{updateTime},
+	</if>
+	<if test="tagEngilsh != null  ">
+		tag_engilsh=#{tagEngilsh},
+	</if>
+	</trim> where tag_id=#{tagId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_commodity_tag where tag_id = #{tagId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_commodity_tag where tag_id = #{tagId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_commodity_tag 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_commodity_tag 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="listPage" parameterType="Object" resultType="java.util.HashMap">
+		SELECT * from shop_commodity_tag where 1=1
+		<if test="tagName != null">
+			AND tag_name = #{tagName}
+		</if>
+		ORDER BY tag_id DESC
+	</select>
+	
+
+  	<select id="getShopCommodityTagByName" resultMap="BaseResultMap"  parameterType="String">
+  		SELECT * from shop_commodity_tag where tag_name = #{tagName}
+  	</select>
+  	
+  	  <select id="getCommodityTagList" resultMap="BaseResultMap" >
+  		SELECT * from shop_commodity_tag 
+  	</select>
+  	
+</mapper>   

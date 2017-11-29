@@ -1,0 +1,13 @@
+package com.flf.entity;
+
+import com.base.entity.BaseEntity;
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopIdlePicEntity<br>
+ */
+public class ShopIdlePic extends BaseEntity {
+	
+		private java.lang.Integer id;//   	private java.lang.Integer idleId;//   闲置表id	private java.lang.String pic;//   上传图片	public java.lang.Integer getId() {	    return this.id;	}	public void setId(java.lang.Integer id) {	    this.id=id;	}	public java.lang.Integer getIdleId() {	    return this.idleId;	}	public void setIdleId(java.lang.Integer idleId) {	    this.idleId=idleId;	}	public java.lang.String getPic() {	    return this.pic;	}	public void setPic(java.lang.String pic) {	    this.pic=pic;	}
+}
+

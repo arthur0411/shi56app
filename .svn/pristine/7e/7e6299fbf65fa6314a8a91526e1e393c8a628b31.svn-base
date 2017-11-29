@@ -1,0 +1,87 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<div id="list">
+			<form name="deleteForm" id="deleteForm">
+				<table style="width: 100%;" class="tableBasic list">
+					<tr>
+						<th>ID</th>
+						<th>交易方式</th>
+						<th>商品名称</th>
+						<th>商品封面图片</th> 
+						<th>商品价格</th>
+						<th>商品分类</th>
+						<th>是否预售</th>
+						<th>是否上架</th>
+						<th>是否推荐</th> 
+						<th>创建时间</th>
+						<th>修改时间</th>
+						<th>商品参数</th>
+						<th>商品库存</th>
+						<th>商品销量</th>
+						<th>操作</th>
+					</tr>
+					<c:choose>
+						<c:when test="${not empty commodityList}">
+							<c:forEach items="${commodityList}" var="list" varStatus="vs">
+								<tr class="main_info">
+									<td>${list.commodity_id }</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.dealWay == '1' }">可租</c:when>
+											<c:when test="${list.dealWay == '2' }">可租可售</c:when>
+										</c:choose>
+									</td>
+									<td>${list.commodity_name }</td>
+									<td><img width="50px;" height="50px;" src="${list.icon }"></td>
+									<td>${list.commodity_price }</td>
+									<td>${list.tag_name }</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.is_presale == 'yes' }">是</c:when>
+											<c:when test="${list.is_presale == 'no' }">否</c:when>
+										</c:choose>
+									</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.is_upjia == 'yes' }">是</c:when>
+											<c:when test="${list.is_upjia == 'no' }">否</c:when>
+											<c:otherwise>未知</c:otherwise>
+										</c:choose>
+									</td>
+									<td>
+										<c:choose>
+											<c:when test="${list.is_recommend == 'yes' }">是</c:when>
+											<c:when test="${list.is_recommend == 'no' }">否</c:when>
+											<c:otherwise>未知</c:otherwise>
+										</c:choose>
+									</td>
+									<td>${list.create_time }</td>
+									<td>${list.down_time }</td>
+						
+									<td>
+										${list.commodity_parameter}
+									</td>
+									<td>${list.commodity_stock }</td>
+									<td>${list.commodity_hot }</td>
+								
+									
+									<td>
+										<a href="/commodity/edit.html?id=${list.commodity_id }">编辑</a>&nbsp; 
+										
+									</td>
+								</tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr class="main_info">
+								<td colspan="5">暂无数据</td>
+							</tr>
+						</c:otherwise>
+					</c:choose>
+				</table>
+			</form>
+		</div>
+
+<script type="text/javascript">
+	
+</script>

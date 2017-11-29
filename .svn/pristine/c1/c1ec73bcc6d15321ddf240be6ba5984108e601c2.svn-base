@@ -1,0 +1,21 @@
+package com.flf.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.base.dao.BaseDao;
+import com.flf.entity.ShopIdle;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopIdleDao<br>
+ */
+public interface ShopIdleMapper extends BaseDao {
+
+	List<ShopIdle> listPage(ShopIdle vo);
+
+	void updateAuditStatus(@Param("id") Integer id, @Param("status") int status);
+
+}

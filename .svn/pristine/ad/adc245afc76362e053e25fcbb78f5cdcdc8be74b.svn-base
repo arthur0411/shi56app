@@ -1,0 +1,44 @@
+package com.flf.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.base.criteria.Criteria;
+import com.base.dao.BaseDao;
+import com.flf.entity.ShopCommodity;
+import com.flf.entity.ShopOrderDetails;
+
+/**
+ * 
+ * <br>
+ * <b>功能：</b>ShopCommodityDao<br>
+ */
+public interface ShopCommodityMapper extends BaseDao {
+
+	List<Map<String, Object>> getCommodityIndex(Criteria criteria);
+
+	List<Map<String, Object>> getRecommendCommodity(Criteria criteria);
+
+	List<Map<String, Object>> getCommodityByTagId(Criteria criteria);
+
+	List<Map<String, Object>> listPage(ShopCommodity vo);
+	
+	List<ShopCommodity> listcart();
+
+	ShopCommodity getCommodityById(Integer commodityId);
+
+	List<Map<String, Object>> getSearchCommodity(Criteria criteria);
+
+	int updateInventoryReduce(ShopOrderDetails details);
+
+	void updateSoldOut(Integer commodityId);
+	
+	void updateStock(@Param("commodityId")Integer commodityId,@Param("num") Integer num);
+
+	List<Map<String, Object>> getBrandTopicCommodity(Criteria criteria);
+
+	List<Map<String, Object>> getCommodityStockById(@Param("commodityId") String[] commodityId);
+
+}

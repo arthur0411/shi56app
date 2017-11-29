@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopCommodityMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopCommodity" >
+	<result column="commodity_id" property="commodityId"/>
+	<result column="commodity_name" property="commodityName"/>
+	<result column="commodity_price" property="commodityPrice"/>
+	<result column="actual_price" property="actualPrice"/>
+	<result column="commodity_img" property="commodityImg"/>
+	<result column="commodity_describe" property="commodityDescribe"/>
+	<result column="commodity_tag_id" property="commodityTagId"/>
+	<result column="commodity_status" property="commodityStatus"/>
+	<result column="is_upjia" property="isUpjia"/>
+	<result column="create_time" property="createTime"/>
+	<result column="down_time" property="downTime"/>
+	<result column="deleter_time" property="deleterTime"/>
+	<result column="is_recommend" property="isRecommend"/>
+	<result column="sort_id" property="sortId"/>
+	<result column="is_presale" property="isPresale"/>
+	<result column="commodity_parameter" property="commodityParameter"/>
+	<result column="sale_stock" property="saleStock"/>
+	<result column="rent_stock" property="rentStock"/>
+	<result column="commodity_hot" property="commodityHot"/>
+	<result column="icon" property="icon"/>
+	<result column="brandTopic" property="brandTopic"/>
+	<result column="brand" property="brand"/>
+	<result column="material" property="material"/>
+	<result column="commoditySize" property="commoditySize"/>
+	<result column="goldenRent" property="goldenRent"/>
+	<result column="platinumRent" property="platinumRent"/>
+	<result column="masonryRent" property="masonryRent"/>
+	<result column="dealWay" property="dealWay"/>
+	<result column="producer" property="producer"/>
+	<result column="commodity_img2" property="commodityImg2"/>
+	<result column="commodity_img3" property="commodityImg3"/>
+	<result column="commodity_img4" property="commodityImg4"/>
+	<result column="commodity_img5" property="commodityImg5"/>
+	<result column="commodity_img6" property="commodityImg6"/>
+	<result column="commodity_img7" property="commodityImg7"/>
+	<result column="commodity_img8" property="commodityImg8"/>
+	<result column="commodity_img9" property="commodityImg9"/>
+	<result column="commodity_img10" property="commodityImg10"/>
+	<result column="bigImg" property="bigImg"/>
+	<result column="buying_nickname" property="buyingNickname"/>
+	<result column="brandId" property="brandId"/>
+</resultMap>
+       
+<!-- shop_commodity table all fields -->
+<sql id="Base_Column_List" >
+	 commodity_id,commodity_name,commodity_price,actual_price,commodity_img,commodity_describe,commodity_tag_id,commodity_status,is_upjia,create_time,down_time,deleter_time,is_recommend,sort_id,
+	 is_presale,commodity_parameter,sale_stock,rent_stock,commodity_hot,icon,brandTopic,brand,material,goldenRent,platinumRent,masonryRent,dealWay,
+	 producer,commodity_img2,commodity_img3,commodity_img4,commodity_img5,commodity_img6,commodity_img7,commodity_img8,commodity_img9,commodity_img10,buying_nickname,bigImg,commoditySize,brandId
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.commodityId != null and condition.commodityId != ''" >
+	    and commodity_id =  #{condition.commodityId}
+	</if>
+	<if test="condition.commodityName != null and condition.commodityName != ''" >
+	    and commodity_name =  #{condition.commodityName}
+	</if>
+	<if test="condition.commodityPrice != null and condition.commodityPrice != ''" >
+	    and commodity_price =  #{condition.commodityPrice}
+	</if>
+	<if test="condition.commodityImg != null and condition.commodityImg != ''" >
+	    and commodity_img =  #{condition.commodityImg}
+	</if>
+	<if test="condition.commodityDescribe != null and condition.commodityDescribe != ''" >
+	    and commodity_describe =  #{condition.commodityDescribe}
+	</if>
+	<if test="condition.commodityTagId != null and condition.commodityTagId != ''" >
+	    and commodity_tag_id =  #{condition.commodityTagId}
+	</if>
+	<if test="condition.commodityStatus != null and condition.commodityStatus != ''" >
+	    and commodity_status =  #{condition.commodityStatus}
+	</if>
+	<if test="condition.isUpjia != null and condition.isUpjia != ''" >
+	    and is_upjia =  #{condition.isUpjia}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.downTime != null and condition.downTime != ''" >
+	    and down_time =  #{condition.downTime}
+	</if>
+	<if test="condition.deleterTime != null and condition.deleterTime != ''" >
+	    and deleter_time =  #{condition.deleterTime}
+	</if>
+	<if test="condition.isRecommend != null and condition.isRecommend != ''" >
+	    and is_recommend =  #{condition.isRecommend}
+	</if>
+	<if test="condition.sortId != null and condition.sortId != ''" >
+	    and sort_id =  #{condition.sortId}
+	</if>
+	<if test="condition.isPresale != null and condition.isPresale != ''" >
+	    and is_presale =  #{condition.isPresale}
+	</if>
+	<if test="condition.commodityParameter != null and condition.commodityParameter != ''" >
+	    and commodity_parameter =  #{condition.commodityParameter}
+	</if>
+	<if test="condition.saleStock != null and condition.saleStock != ''" >
+	    and sale_stock =  #{condition.saleStock}
+	</if>
+	<if test="condition.rentStock != null and condition.rentStock != ''" >
+	    and rent_stock =  #{condition.rentStock}
+	</if>
+	<if test="condition.commodityHot != null and condition.commodityHot != ''" >
+	    and commodity_hot =  #{condition.commodityHot}
+	</if>
+	<if test="condition.icon != null and condition.icon != ''" >
+	    and icon =  #{condition.icon}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commodityId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_commodity(commodity_id,commodity_name,commodity_price,actual_price,commodity_img,commodity_describe,commodity_tag_id,commodity_status,is_upjia,create_time,down_time,deleter_time,is_recommend,sort_id,is_presale,commodity_parameter,sale_stock,rent_stock,commodity_hot,icon,brandTopic,brand,material,goldenRent,platinumRent,masonryRent,dealWay,producer,commodity_img2,commodity_img3,commodity_img4,commodity_img5,commodity_img6,commodity_img7,commodity_img8,commodity_img9,commodity_img10,buying_nickname,bigImg,commoditySize,brandId)
+ values(#{commodityId},#{commodityName},#{commodityPrice},#{actualPrice},#{commodityImg},#{commodityDescribe},#{commodityTagId},#{commodityStatus},#{isUpjia},now(),#{downTime},#{deleterTime},#{isRecommend},#{sortId},#{isPresale},#{commodityParameter},#{saleStock},#{rentStock},0,#{icon},#{brandTopic},#{brand},#{material},#{goldenRent},#{platinumRent},#{masonryRent},#{dealWay},#{producer},#{commodityImg2},#{commodityImg3},#{commodityImg4},#{commodityImg5},#{commodityImg6},#{commodityImg7},#{commodityImg8},#{commodityImg9},#{commodityImg10},#{buyingNickname},#{bigImg},#{commoditySize},#{brandId})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_commodity set commodity_name=#{commodityName},commodity_price=#{commodityPrice},commodity_img=#{commodityImg},sale_stock=#{saleStock},rent_stock=#{rentStock},commodity_hot=#{commodityHot},commoditySize=#{commoditySize},icon=#{icon} where commodity_id=#{commodityId}
+ </update>
+ 
+ <!-- 根据id，修改记录-->  
+ <update id="updateStock" parameterType="Object" >
+  update shop_commodity set sale_stock=sale_stock-#{num},commodity_hot=commodity_hot+#{num} where commodity_id=#{commodityId}
+  </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_commodity set 
+	<trim  suffixOverrides="," >
+	<if test="commodityName != null  ">
+		commodity_name=#{commodityName},
+	</if>
+	<if test="commodityPrice != null  ">
+		commodity_price=#{commodityPrice},
+	</if>
+	<if test="actualPrice != null  ">
+		actual_price=#{actualPrice},
+	</if>
+	<if test="commodityImg != null  ">
+		commodity_img=#{commodityImg},
+	</if>
+	<if test="commodityDescribe != null  ">
+		commodity_describe=#{commodityDescribe},
+	</if>
+	<if test="commodityTagId != null  ">
+		commodity_tag_id=#{commodityTagId},
+	</if>
+	<if test="commodityStatus != null  ">
+		commodity_status=#{commodityStatus},
+	</if>
+	<if test="isUpjia != null  ">
+		is_upjia=#{isUpjia},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="downTime != null  ">
+		down_time=#{downTime},
+	</if>
+	<if test="deleterTime != null  ">
+		deleter_time=#{deleterTime},
+	</if>
+	<if test="isRecommend != null  ">
+		is_recommend=#{isRecommend},
+	</if>
+	<if test="sortId != null  ">
+		sort_id=#{sortId},
+	</if>
+	<if test="isPresale != null  ">
+		is_presale=#{isPresale},
+	</if>
+	<if test="commodityParameter != null  ">
+		commodity_parameter=#{commodityParameter},
+	</if>
+	<if test="saleStock != null  ">
+		sale_stock=#{saleStock},
+	</if>
+	<if test="rentStock != null  ">
+		rent_stock=#{rentStock},
+	</if>
+	<if test="commodityHot != null  ">
+		commodity_hot=#{commodityHot},
+	</if>
+	<if test="icon != null  ">
+		icon=#{icon},
+	</if>
+	<if test="brandTopic != null  ">
+		brandTopic=#{brandTopic},
+	</if>
+	<if test="brand != null  ">
+		brand=#{brand},
+	</if>
+	<if test="brandId != null  ">
+		brandId=#{brandId},
+	</if>
+	<if test="material != null  ">
+		material=#{material},
+	</if>
+	<if test="goldenRent != null  ">
+		goldenRent=#{goldenRent},
+	</if>
+	<if test="platinumRent != null  ">
+		platinumRent=#{platinumRent},
+	</if>
+	<if test="dealWay != null  ">
+		dealWay=#{dealWay},
+	</if>
+	<if test="masonryRent != null  ">
+		masonryRent=#{masonryRent},
+	</if>
+	<if test="producer != null  ">
+		producer=#{producer},
+	</if>
+	<if test="commodityImg2 != null  ">
+		commodity_img2=#{commodityImg2},
+	</if>
+	<if test="commodityImg3 != null  ">
+		commodity_img3=#{commodityImg3},
+	</if>
+	<if test="commodityImg4 != null  ">
+		commodity_img4=#{commodityImg4},
+	</if>
+	<if test="commodityImg5 != null  ">
+		commodity_img5=#{commodityImg5},
+	</if>
+	<if test="commodityImg6 != null  ">
+		commodity_img6=#{commodityImg6},
+	</if>
+	<if test="commodityImg7 != null  ">
+		commodity_img7=#{commodityImg7},
+	</if>
+	<if test="commodityImg8 != null  ">
+		commodity_img8=#{commodityImg8},
+	</if>
+	<if test="commodityImg9 != null  ">
+		commodity_img9=#{commodityImg9},
+	</if>
+	<if test="commodityImg10 != null  ">
+		commodity_img10=#{commodityImg10},
+	</if>
+	<if test="buyingNickname != null  ">
+		buying_nickname=#{buyingNickname},
+	</if>
+	<if test="bigImg != null  ">
+		bigImg=#{bigImg},
+	</if>
+	<if test="commoditySize != null  ">
+		commoditySize=#{commoditySize},
+	</if>
+	
+	</trim> where commodity_id=#{commodityId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_commodity where commodity_id = #{commodityId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_commodity where commodity_id = #{commodityId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_commodity 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_commodity 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+
+	<select id="getCommodityIndex" resultType="java.util.HashMap" parameterType="Object">		
+		SELECT sc.*
+		    <choose>
+                <when test="condition.userId != null and condition.userId != ''">
+                      ,(SELECT COUNT(id) FROM shop_wish_list WHERE STATUS=1 
+				   	  and userId =  #{condition.userId}
+				      AND commodityNo= sc.commodity_id  ) AS iswish 
+                </when>
+                <otherwise>
+                       ,0 AS iswish 
+                 </otherwise>
+         </choose>
+		,sct.tag_name FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id 
+		ORDER BY sc.sort_id DESC 
+		<if test="limitClause != null and limitClause != ''">
+			${limitClause}
+		</if>
+	</select>
+	
+	<select id="getRecommendCommodity" resultType="java.util.HashMap" parameterType="Object">
+		SELECT 
+		sc.*
+		    <choose>
+                <when test="condition.userId != null and condition.userId != ''">
+                      ,(SELECT COUNT(id) FROM shop_wish_list WHERE STATUS=1 
+				   	  and userId =  #{condition.userId}
+				      AND commodityNo= sc.commodity_id  ) AS iswish 
+                </when>
+                <otherwise>
+                       ,0 AS iswish 
+                 </otherwise>
+           </choose>
+           ,sct.tag_name FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id  WHERE sc.is_recommend = 'yes'  ORDER BY sc.sort_id DESC LIMIT 6
+	</select>
+	
+	<select id="getCommodityByTagId" resultType="java.util.HashMap" parameterType="Object">
+		select   sc.* <choose>
+                <when test="condition.userId != null and condition.userId != ''">
+                      ,(SELECT COUNT(id) FROM shop_wish_list WHERE STATUS=1 
+				   	  and userId =  #{condition.userId}
+				      AND commodityNo= sc.commodity_id  ) AS iswish 
+                </when>
+                <otherwise>
+                       ,0 AS iswish 
+                 </otherwise>
+         </choose>
+         ,sct.tag_name FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id 
+		<include refid="Example_Where_Clause"/>
+		and sc.is_upjia = 'yes'
+		ORDER BY sc.sort_id DESC 
+		<if test="limitClause != null and limitClause != ''">
+			${limitClause}
+		</if>
+	</select>
+	
+	<select id="getSearchCommodity" resultType="java.util.HashMap" parameterType="Object">
+		select sc.*
+		    <choose>
+                <when test="condition.userId != null and condition.userId != ''">
+                      ,(SELECT COUNT(id) FROM shop_wish_list WHERE STATUS=1 
+				   	  and userId =  #{condition.userId}
+				      AND commodityNo= sc.commodity_id  ) AS iswish 
+                </when>
+                <otherwise>
+                       ,0 AS iswish 
+                 </otherwise>
+         </choose>
+          ,sct.tag_name FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id 
+		where 1=1 
+		<if test="condition.commodityName != null and condition.commodityName != ''" >
+	   	 and  sc.commodity_name like CONCAT('%','${condition.commodityName}','%' )  
+		</if>
+	
+		and sc.is_upjia = 'yes'
+		ORDER BY sc.sort_id DESC 
+		<if test="limitClause != null and limitClause != ''">
+			${limitClause}
+		</if>
+	</select>
+	
+	<select id="getBrandTopicCommodity" resultType="java.util.HashMap" >
+		select  sc.*
+		    <choose>
+                <when test="condition.userId != null and condition.userId != ''">
+                      ,(SELECT COUNT(id) FROM shop_wish_list WHERE STATUS=1 
+				   	  and userId =  #{condition.userId}
+				      AND commodityNo= sc.commodity_id  ) AS iswish 
+                </when>
+                <otherwise>
+                       ,0 AS iswish 
+                 </otherwise>
+         </choose>  ,sct.tag_name FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id where sc.brandTopic=1 ORDER BY sc.sort_id DESC 
+	</select>
+	
+	
+	<select id="listcart" resultMap="BaseResultMap" parameterType="Object">
+		SELECT * FROM shop_commodity  order by sort_id desc
+	</select>
+	
+	<select id="listPage" resultType="java.util.HashMap" parameterType="Object">
+		SELECT sc.*,sct.tag_name FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id WHERE 1=1
+		<if test="commodityId != null  and commodityId != '' ">
+			and commodity_id = #{commodityId}
+		</if>
+		<if test="commodityName != null  and commodityName != '' ">
+			and commodity_name like '%${commodityName}%'
+		</if>
+		<if test="isUpjia != null   and isUpjia != '' ">
+			and is_upjia=#{isUpjia}
+		</if>
+		<if test="commodityTagId != null  and commodityTagId != ''  ">
+			and commodity_tag_id=#{commodityTagId}
+		</if>
+		<if test="isPresale != null and isPresale != ''   ">
+			and	is_presale=#{isPresale}
+		</if>
+		<if test="isRecommend != null   and isRecommend != '' ">
+			and is_recommend=#{isRecommend}
+		</if>
+		<if test="dealWay != null   and dealWay != '' ">
+			and dealWay=#{dealWay}
+		</if>
+		order by sort_id desc
+	</select>
+	
+  	<select id="getCommodityById" resultMap="BaseResultMap"   parameterType="Integer">
+		SELECT sc.*,sct.tag_name as tagName FROM shop_commodity sc left join shop_commodity_tag sct 
+		on sct.tag_id = sc.commodity_tag_id WHERE sc.commodity_id=#{commodityId}
+	</select>
+	
+	
+	<select id="getSaleStockById" resultType="java.util.HashMap" parameterType="Object">
+			select is_upjia,commodity_id,sale_stock from shop_commodity where 
+			commodity_id in 
+				<foreach collection="commodityId" item="item" index="index"
+		      open="(" close=")" separator=",">
+		    	#{item}
+		</foreach>
+	</select>
+	
+	<select id="getRentStock" resultType="java.lang.String" parameterType="Object">
+			select rent_stock from shop_commodity where 
+			commodity_id = #{commodityId}
+	</select>
+	
+	<select id="getRentStockById" resultType="java.util.HashMap" parameterType="Object">
+			select is_upjia,commodity_id,sale_stock from shop_commodity where 
+			commodity_id in 
+				<foreach collection="commodityId" item="item" index="index"
+		      open="(" close=")" separator=",">
+		    	#{item}
+		</foreach>
+	</select>
+	
+	<update id="updateInventoryReduce" parameterType="ShopOrderDetails">
+		UPDATE shop_commodity SET sale_stock = sale_stock - #{commodityOnenum},commodity_hot = commodity_hot + #{commodityOnenum}
+		WHERE `commodity_id` = #{commodityId} AND sale_stock >= #{commodityOnenum}
+	</update>
+	
+	<update id="updateRentInventoryReduce" parameterType="ShopOrderDetails">
+		UPDATE shop_commodity SET rent_stock = rent_stock - #{commodityOnenum},commodity_hot = commodity_hot + #{commodityOnenum}
+		WHERE `commodity_id` = #{commodityId} AND rent_stock >= #{commodityOnenum}
+	</update>
+	
+	<update id="updateSoldOut" parameterType="Integer">
+		UPDATE shop_commodity SET is_upjia = 'no' WHERE `commodity_id` = #{commodityId}
+	</update>
+	
+	<update id="changeBrand" parameterType="Object">
+		UPDATE shop_commodity SET brand = #{brandName} where brandId = #{brandId}
+	</update>
+	
+	<update id="guaHui" parameterType="Object">
+		UPDATE shop_commodity SET sale_stock = 0 where CONVERT(SUBSTRING(commodity_price, 2),SIGNED) > #{price}
+	</update>
+	
+</mapper>   

@@ -1,0 +1,20 @@
+package com.flf.controller;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/cart")
+public class CartController {
+
+	private static final Logger log = Logger.getLogger(CartController.class);
+	
+
+	
+	@RequestMapping(value = "/toMain")
+	public String loginGet() {
+		return "cart/main";
+	}
+
+}
