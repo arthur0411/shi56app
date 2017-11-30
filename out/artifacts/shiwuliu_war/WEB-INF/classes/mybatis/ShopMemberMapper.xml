@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopMemberMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopMember" >
+	<result column="member_id" property="memberId"/>
+	<result column="member_level" property="memberLevel"/>
+	<result column="member_integral" property="memberIntegral"/>
+	<result column="member_tel" property="memberTel"/>
+	<result column="member_email" property="memberEmail"/>
+	<result column="member_sex" property="memberSex"/>
+	<result column="member_address" property="memberAddress"/>
+	<result column="member_profession" property="memberProfession"/>
+	<result column="member_hobby" property="memberHobby"/>
+	<result column="buy_time" property="buyTime"/>
+	<result column="create_time" property="createTime"/>
+	<result column="member_openid" property="memberOpenid"/>
+	<result column="user_id" property="userId"/>
+</resultMap>
+       
+<!-- shop_member table all fields -->
+<sql id="Base_Column_List" >
+	 member_id,member_level,member_integral,member_tel,member_email,member_sex,member_address,member_profession,member_hobby,buy_time,create_time,member_openid,user_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.memberId != null and condition.memberId != ''" >
+	    and member_id =  #{condition.memberId}
+	</if>
+	<if test="condition.memberLevel != null and condition.memberLevel != ''" >
+	    and member_level =  #{condition.memberLevel}
+	</if>
+	<if test="condition.memberIntegral != null and condition.memberIntegral != ''" >
+	    and member_integral =  #{condition.memberIntegral}
+	</if>
+	<if test="condition.memberTel != null and condition.memberTel != ''" >
+	    and member_tel =  #{condition.memberTel}
+	</if>
+	<if test="condition.memberEmail != null and condition.memberEmail != ''" >
+	    and member_email =  #{condition.memberEmail}
+	</if>
+	<if test="condition.memberSex != null and condition.memberSex != ''" >
+	    and member_sex =  #{condition.memberSex}
+	</if>
+	<if test="condition.memberAddress != null and condition.memberAddress != ''" >
+	    and member_address =  #{condition.memberAddress}
+	</if>
+	<if test="condition.memberProfession != null and condition.memberProfession != ''" >
+	    and member_profession =  #{condition.memberProfession}
+	</if>
+	<if test="condition.memberHobby != null and condition.memberHobby != ''" >
+	    and member_hobby =  #{condition.memberHobby}
+	</if>
+	<if test="condition.buyTime != null and condition.buyTime != ''" >
+	    and buy_time =  #{condition.buyTime}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.memberOpenid != null and condition.memberOpenid != ''" >
+	    and member_openid =  #{condition.memberOpenid}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_member(member_id,member_level,member_integral,member_tel,member_email,member_sex,member_address,member_profession,member_hobby,buy_time,create_time,member_openid,user_id)
+ values(#{memberId},#{memberLevel},#{memberIntegral},#{memberTel},#{memberEmail},#{memberSex},#{memberAddress},#{memberProfession},#{memberHobby},#{buyTime},now(),#{memberOpenid},#{userId})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_member set member_level=#{memberLevel},member_integral=#{memberIntegral},member_tel=#{memberTel},member_email=#{memberEmail},member_sex=#{memberSex},member_address=#{memberAddress},member_profession=#{memberProfession},member_hobby=#{memberHobby},buy_time=#{buyTime},create_time=now(),member_openid=#{memberOpenid},user_id=#{userId} where member_id=#{memberId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_member set 
+	<trim  suffixOverrides="," >
+	<if test="memberLevel != null  ">
+		member_level=#{memberLevel},
+	</if>
+	<if test="memberIntegral != null  ">
+		member_integral=#{memberIntegral},
+	</if>
+	<if test="memberTel != null  ">
+		member_tel=#{memberTel},
+	</if>
+	<if test="memberEmail != null  ">
+		member_email=#{memberEmail},
+	</if>
+	<if test="memberSex != null  ">
+		member_sex=#{memberSex},
+	</if>
+	<if test="memberAddress != null  ">
+		member_address=#{memberAddress},
+	</if>
+	<if test="memberProfession != null  ">
+		member_profession=#{memberProfession},
+	</if>
+	<if test="memberHobby != null  ">
+		member_hobby=#{memberHobby},
+	</if>
+	<if test="buyTime != null  ">
+		buy_time=#{buyTime},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="memberOpenid != null  ">
+		member_openid=#{memberOpenid},
+	</if>
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	</trim> where member_id=#{memberId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_member where member_id = #{memberId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_member where member_id = #{memberId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_member 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_member 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

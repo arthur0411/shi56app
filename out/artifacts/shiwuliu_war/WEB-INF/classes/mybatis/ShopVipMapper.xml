@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopVipMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopVip" >
+	<result column="vip_id" property="vipId"/>
+	<result column="vip_name" property="vipName"/>
+	<result column="vip_price" property="vipPrice"/>
+	<result column="create_time" property="createTime"/>
+	<result column="number" property="number"/>
+	<result column="commodity_price" property="commodityPrice"/>
+</resultMap>
+       
+<!-- shop_vip table all fields -->
+<sql id="Base_Column_List" >
+	 vip_id,vip_name,vip_price,create_time,number,commodity_price
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.vipId != null and condition.vipId != ''" >
+	    and vip_id =  #{condition.vipId}
+	</if>
+	<if test="condition.vipName != null and condition.vipName != ''" >
+	    and vip_name =  #{condition.vipName}
+	</if>
+	<if test="condition.vipPrice != null and condition.vipPrice != ''" >
+	    and vip_price =  #{condition.vipPrice}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="vipId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_vip(vip_id,vip_name,vip_price,create_time,number,commodity_price)
+ values(#{vipId},#{vipName},#{vipPrice},#{createTime},#{number},#{commodityPrice})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_vip set vip_name=#{vipName},vip_price=#{vipPrice},create_time=now(),number=#{number},commodity_price=#{commodityPrice} where vip_id=#{vipId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_vip set 
+	<trim  suffixOverrides="," >
+	<if test="vipName != null  ">
+		vip_name=#{vipName},
+	</if>
+	<if test="vipPrice != null  ">
+		vip_price=#{vipPrice},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	<if test="number != null  ">
+		number=#{number},
+	</if>
+	<if test="commodityPrice != null  ">
+		commodity_price=#{commodityPrice},
+	</if>
+	</trim> where vip_id=#{vipId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_vip where vip_id = #{vipId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_vip where vip_id = #{vipId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_vip 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_vip 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="getShopVipList" resultType="java.util.HashMap" >
+		SELECT * FROM shop_vip ORDER BY vip_id DESC LIMIT 6 
+	</select>
+	
+	<select id="listPage" resultMap="BaseResultMap"  parameterType="Object">
+		select * from shop_vip order by vip_id desc
+	</select>
+	
+	<select id="getShopVipByName" resultType="java.util.HashMap" parameterType="String">
+		select * from shop_vip where vip_name=#{vipName}
+	</select>
+	
+
+  	
+</mapper>   

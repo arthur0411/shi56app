@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopUserAddressMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopUserAddress" >
+	<result column="address_id" property="addressId"/>
+	<result column="name" property="name"/>
+	<result column="phone" property="phone"/>
+	<result column="address" property="address"/>
+	<result column="user_id" property="userId"/>
+	<result column="is_default" property="isDefault"/>
+	<result column="area" property="area"/>
+</resultMap>
+       
+<!-- shop_user_address table all fields -->
+<sql id="Base_Column_List" >
+	 address_id,name,phone,address,user_id,is_default,area
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.addressId != null and condition.addressId != ''" >
+	    and address_id =  #{condition.addressId}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.phone != null and condition.phone != ''" >
+	    and phone =  #{condition.phone}
+	</if>
+	<if test="condition.address != null and condition.address != ''" >
+	    and address =  #{condition.address}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.isDefault != null and condition.isDefault != ''" >
+	    and is_default =  #{condition.isDefault}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="addressId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_user_address(address_id,name,phone,address,user_id,is_default,area)
+ values(#{addressId},#{name},#{phone},#{address},#{userId},#{isDefault},#{area})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_user_address set name=#{name},phone=#{phone},address=#{address},user_id=#{userId},is_default=#{isDefault}	,area=#{area} where address_id=#{addressId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_user_address set 
+	<trim  suffixOverrides="," >
+	<if test="name != null  ">
+		name=#{name},
+	</if>
+	<if test="phone != null  ">
+		phone=#{phone},
+	</if>
+	<if test="address != null  ">
+		address=#{address},
+	</if>
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="isDefault != null  ">
+		is_default=#{isDefault},
+	</if>
+	<if test="area != null  ">
+		area=#{area},
+	</if>
+	</trim> where address_id=#{addressId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_user_address where address_id = #{addressId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_user_address where address_id = #{addressId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_user_address 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_user_address 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="getShopAddressList" resultType="java.util.HashMap" parameterType="Integer">
+		SELECT * FROM shop_user_address where user_id=#{userId}
+	</select>
+	
+	<update id="updateDefaultAddressByUserId" parameterType="Integer">
+		update shop_user_address set is_default = 1 where user_id = #{userId}
+	</update>
+  	
+</mapper>   

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopStockMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopStock" >
+	<result column="stock_id" property="stockId"/>
+	<result column="stock_name" property="stockName"/>
+	<result column="stock_num" property="stockNum"/>
+	<result column="stock_inventory" property="stockInventory"/>
+	<result column="stock_early" property="stockEarly"/>
+	<result column="create_time" property="createTime"/>
+	<result column="update_time" property="updateTime"/>
+</resultMap>
+       
+<!-- shop_stock table all fields -->
+<sql id="Base_Column_List" >
+	 stock_id,stock_name,stock_num,stock_inventory,stock_early,create_time,update_time
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.stockId != null and condition.stockId != ''" >
+	    and stock_id =  #{condition.stockId}
+	</if>
+	<if test="condition.stockName != null and condition.stockName != ''" >
+	    and stock_name =  #{condition.stockName}
+	</if>
+	<if test="condition.stockNum != null and condition.stockNum != ''" >
+	    and stock_num =  #{condition.stockNum}
+	</if>
+	<if test="condition.stockInventory != null and condition.stockInventory != ''" >
+	    and stock_inventory =  #{condition.stockInventory}
+	</if>
+	<if test="condition.stockEarly != null and condition.stockEarly != ''" >
+	    and stock_early =  #{condition.stockEarly}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+	<if test="condition.updateTime != null and condition.updateTime != ''" >
+	    and update_time =  #{condition.updateTime}
+	</if>
+</trim>
+</sql>
+   
+
+
+ 
+	<!-- 根据id查询  -->
+	<select id="queryStockById" resultType="java.lang.Integer" parameterType="Object">
+		select commodity_stock
+		 from shop_commodity where commodity_id = #{id}
+	</select>
+
+
+</mapper>   

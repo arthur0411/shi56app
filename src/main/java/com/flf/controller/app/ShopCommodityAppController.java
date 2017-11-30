@@ -294,6 +294,37 @@ public class ShopCommodityAppController {
 		}
 	}
 
+	@RequestMapping(value = "/listCommodityByBrand")
+	public void listCommodityByBrand(String brandId, HttpServletResponse response) {
+		Map<String, Object> jsonMap = new HashMap<String, Object>();
+		List<Map<String, Object>> shopCommodity = null;
+		ShopCommodity sc =new ShopCommodity();
+		sc.setBrandId(brandId);
+		try {
+			log.info("通过品牌获取商品接口");
+			shopCommodity = shopCommodityService.listPage(sc);
+
+			if (shopCommodity.size() > 0) {
+				jsonMap.put("error", "0");
+				jsonMap.put("msg", "成功");
+			} else {
+				jsonMap.put("error", "0");
+				jsonMap.put("msg", "为空");
+			}
+		} catch (Exception e) {
+			jsonMap.put("error", "1");
+			jsonMap.put("msg", "未知异常");
+			e.printStackTrace();
+		} finally {
+			try {
+				jsonMap.put("BrandCommodityList", shopCommodity);
+				JSONUtils.printObject(jsonMap, response);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	/**
 	 * 获取单个商品的库存，下架状态
 	 * 

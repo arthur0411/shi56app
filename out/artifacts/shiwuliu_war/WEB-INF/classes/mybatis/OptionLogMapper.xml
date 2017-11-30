@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.OptionLogMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.OptionLog" >
+	<result column="id" property="id"/>
+	<result column="user_name" property="userName"/>
+	<result column="user_id" property="userId"/>
+	<result column="option_name" property="optionName"/>
+	<result column="option_url" property="optionUrl"/>
+	<result column="create_time" property="createTime"/>
+</resultMap>
+       
+<!-- option_log table all fields -->
+<sql id="Base_Column_List" >
+	 id,user_name,user_id,option_name,option_url,create_time
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.userName != null and condition.userName != ''" >
+	    and user_name =  #{condition.userName}
+	</if>
+	<if test="condition.userId != null and condition.userId != ''" >
+	    and user_id =  #{condition.userId}
+	</if>
+	<if test="condition.optionName != null and condition.optionName != ''" >
+	    and option_name =  #{condition.optionName}
+	</if>
+	<if test="condition.optionUrl != null and condition.optionUrl != ''" >
+	    and option_url =  #{condition.optionUrl}
+	</if>
+	<if test="condition.createTime != null and condition.createTime != ''" >
+	    and create_time =  #{condition.createTime}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into option_log(id,user_name,user_id,option_name,option_url,create_time)
+ values(#{id},#{userName},#{userId},#{optionName},#{optionUrl},now())
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update option_log set user_name=#{userName},user_id=#{userId},option_name=#{optionName},option_url=#{optionUrl},create_time=now() where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update option_log set 
+	<trim  suffixOverrides="," >
+	<if test="userName != null  ">
+		user_name=#{userName},
+	</if>
+	<if test="userId != null  ">
+		user_id=#{userId},
+	</if>
+	<if test="optionName != null  ">
+		option_name=#{optionName},
+	</if>
+	<if test="optionUrl != null  ">
+		option_url=#{optionUrl},
+	</if>
+	<if test="createTime != null  ">
+		create_time=#{createTime},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from option_log where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from option_log where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from option_log 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from option_log 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+  	
+</mapper>   

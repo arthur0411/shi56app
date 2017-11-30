@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopPicMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopPic" >
+	<result column="id" property="id" />
+	<result column="pic_name" property="picName"/>
+	<result column="pic_url" property="picUrl"/>
+</resultMap>
+       
+<!-- shop_commodity_brand table all fields -->
+<sql id="Base_Column_List" >
+	 id,pic_name,pic_url
+</sql>
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="brandId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_pic(id,pic_name,pic_url)
+ values(#{id},#{picName},#{picUrl})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_pic set pic_name=#{picName},pic_url=#{picUrl} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_commodity_brand set 
+	<trim  suffixOverrides="," >
+	<if test="picName != null  ">
+		pic_name=#{picName},
+	</if>
+	<if test="picUrl != null  ">
+		pic_url=#{picUrl},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_pic where id = #{id}
+</delete>
+ 
+ <select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_pic where id = #{id}
+</select>
+ 
+</mapper>   

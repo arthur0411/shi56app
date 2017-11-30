@@ -100,6 +100,9 @@ public class ShopCommodityController {
 		List<Map<String, Object>> commodityTagList = shopCommodityTagService.listPage(commodityTag);
 		mv.addObject("commodityTagList", commodityTagList);
 
+		List<Map<String, Object>> brandList = shopCommodityBrandService.listAll();
+		mv.addObject("brandList", brandList);
+
 		List<Map<String, Object>> commodityList = shopCommodityService.listPage(vo);
 		mv.addObject("vo", vo);
 		mv.addObject("commodityList", commodityList);

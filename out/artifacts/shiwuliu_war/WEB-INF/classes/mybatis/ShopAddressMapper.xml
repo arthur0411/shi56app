@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopAddressMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopAddress" >
+	<result column="id" property="id"/>
+	<result column="code" property="code"/>
+	<result column="parentId" property="parentId"/>
+	<result column="name" property="name"/>
+	<result column="level" property="level"/>
+</resultMap>
+       
+<!-- shop_address table all fields -->
+<sql id="Base_Column_List" >
+	 id,code,parentId,name,level
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.id != null and condition.id != ''" >
+	    and id =  #{condition.id}
+	</if>
+	<if test="condition.code != null and condition.code != ''" >
+	    and code =  #{condition.code}
+	</if>
+	<if test="condition.parentId != null and condition.parentId != ''" >
+	    and parentId =  #{condition.parentId}
+	</if>
+	<if test="condition.name != null and condition.name != ''" >
+	    and name =  #{condition.name}
+	</if>
+	<if test="condition.level != null and condition.level != ''" >
+	    and level =  #{condition.level}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_address(id,code,parentId,name,level)
+ values(#{id},#{code},#{parentId},#{name},#{level})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_address set code=#{code},parentId=#{parentId},name=#{name},level=#{level} where id=#{id}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_address set 
+	<trim  suffixOverrides="," >
+	<if test="code != null  ">
+		code=#{code},
+	</if>
+	<if test="parentId != null  ">
+		parentId=#{parentId},
+	</if>
+	<if test="name != null  ">
+		name=#{name},
+	</if>
+	<if test="level != null  ">
+		level=#{level},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_address where id = #{id}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_address where id = #{id}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_address 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_address 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+
+	<!-- 查询所有城市列表 -->
+	<select id="listCity" resultMap="BaseResultMap">
+		SELECT * FROM shop_address WHERE `level` = 2
+	</select>
+	
+	<select id="getAreaProvinceList"  resultMap="BaseResultMap">
+		SELECT * FROM shop_address where level=1
+	</select>
+
+	<select id="getAreaByCity"  resultMap="BaseResultMap">
+		SELECT a.`id`, a.`code`, a.`name` FROM shop_address a
+		WHERE a.`name` = #{city} AND `level` = 3
+		LIMIT 1
+	</select>
+	
+	<select id="getAreaByPCode" parameterType="String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM shop_address WHERE parentId=#{parentId}
+	</select>
+  	
+</mapper>   

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flf.mapper.ShopOrderDetailsMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.flf.entity.ShopOrderDetails" >
+	<result column="d_id" property="dId"/>
+	<result column="commodity_id" property="commodityId"/>
+	<result column="commodity_onenum" property="commodityOnenum"/>
+	<result column="commodity_score" property="commodityScore"/>
+	<result column="actualPayment" property="actualPayment"/>
+	<result column="commodityrent" property="commodityrent"/>
+	
+	<association property="orderId" column="order_id" javaType="com.flf.entity.ShopOrder" select="com.flf.mapper.ShopOrderMapper.queryById">
+		<result column="order_id" property="orderId"/>
+		<result column="order_code" property="orderCode"/>
+		<result column="user_id" property="userId"/>
+		<result column="delivery_status" property="deliveryStatus"/>
+		<result column="return_status" property="returnStatus"/>
+		<result column="create_time" property="createTime"/>
+		<result column="is_assess" property="isAssess"/>
+		<result column="is_payment" property="isPayment"/>
+		<result column="order_nummmm" property="orderNummmm"/>
+		<result column="express" property="express"/>
+		<result column="express_num" property="expressNum"/>
+		<result column="commodity_num" property="commodityNum"/>
+		<result column="order_status" property="orderStatus"/>
+		<result column="queren_ok" property="querenOk"/>
+		<result column="name" property="name"/>
+		<result column="phone" property="phone"/>
+		<result column="address" property="address"/>
+		<result column="jiname" property="jiname"/>
+		<result column="jiaddress" property="jiaddress"/>
+		<result column="return_time" property="returnTime"/>
+		<result column="is_shouhou" property="isShouhou"/>
+		<result column="paymentWay" property="paymentWay"/>
+		<result column="paymentTime" property="paymentTime"/>
+		<result column="cancelTime" property="cancelTime"/>
+		<result column="distributionTime" property="distributionTime"/>
+		<result column="wearingDays" property="wearingDays"/>
+		<result column="returnExpress" property="returnExpress"/>
+		<result column="returnExpressCode" property="returnExpressCode"/>
+	</association>
+		
+</resultMap>
+       
+<!-- shop_order_details table all fields -->
+<sql id="Base_Column_List" >
+	 d_id,order_id,commodity_id,commodity_onenum,commodity_score,actualPayment,commodityrent
+</sql>
+   
+   <select id="getChainDetailByOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from shop_order_details where order_id = #{orderId,jdbcType=VARCHAR}
+   </select>
+	
+   
+<!-- 查询条件 -->
+<sql id="Example_Where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="condition.dId != null and condition.dId != ''" >
+	    and d_id =  #{condition.dId}
+	</if>
+	<if test="condition.orderId != null and condition.orderId != ''" >
+	    and order_id =  #{condition.orderId}
+	</if>
+	<if test="condition.commodityId != null and condition.commodityId != ''" >
+	    and commodity_id =  #{condition.commodityId}
+	</if>
+	<if test="condition.commodityOnenum != null and condition.commodityOnenum != ''" >
+	    and commodity_onenum =  #{condition.commodityOnenum}
+	</if>
+	<if test="condition.commodityScore != null and condition.commodityScore != ''" >
+	    and commodity_score =  #{condition.commodityScore}
+	</if>
+	<if test="condition.actualPayment != null and condition.actualPayment != ''" >
+	    and actualPayment =  #{condition.actualPayment}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入记录 -->
+<insert id="add" parameterType="Object" >
+<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="dId">
+	SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into shop_order_details(d_id,order_id,commodity_id,commodity_onenum,commodity_score,actualPayment,commodityrent)
+ values(#{dId},#{orderId.orderId},#{commodityId},#{commodityOnenum},#{commodityScore},#{actualPayment},#{commodityrent})
+</insert>
+
+<!-- 根据id，修改记录-->  
+ <update id="update" parameterType="Object" >
+  update shop_order_details set order_id=#{orderId},commodity_id=#{commodityId},commodity_onenum=#{commodityOnenum},commodity_score=#{commodityScore},actualPayment=#{actualPayment} where d_id=#{dId}
+ </update>
+ 
+ <!-- 修改记录，只修改只不为空的字段 -->
+<update id="updateBySelective" parameterType="Object" >
+	update shop_order_details set 
+	<trim  suffixOverrides="," >
+	<if test="orderId != null  ">
+		order_id=#{orderId},
+	</if>
+	<if test="commodityId != null  ">
+		commodity_id=#{commodityId},
+	</if>
+	<if test="commodityOnenum != null  ">
+		commodity_onenum=#{commodityOnenum},
+	</if>
+	<if test="commodityScore != null  ">
+		commodity_score=#{commodityScore},
+	</if>
+	<if test="actualPayment != null  ">
+		actualPayment=#{actualPayment},
+	</if>
+	<if test="commodityrent != null  ">
+		commodityrent=#{commodityrent},
+	</if>
+	
+	</trim> where d_id=#{dId}
+</update>
+
+<!-- 删除记录 -->
+<delete id="delete" parameterType="Object">
+	delete 	 from shop_order_details where d_id = #{dId}
+</delete>
+ 
+<!-- 根据id查询  -->
+<select id="queryById"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> 
+	 from shop_order_details where d_id = #{dId}
+</select>
+
+<!--  列表总数-->
+<select id="queryByCount" resultType="java.lang.Integer"  parameterType="Object">
+	select count(1) from shop_order_details 
+	<include refid="Example_Where_Clause"/>
+</select>
+  	
+<!-- 查询列表 -->
+<select id="queryByList" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from shop_order_details 
+	<include refid="Example_Where_Clause"/>
+	<if test="orderByClause != null and orderByClause != ''" >
+       order by  ${orderByClause}
+    </if>
+    <if test="limitClause != null and limitClause != ''" >
+       ${limitClause}
+    </if>
+</select>
+
+	<select id="listAllOrderDetails" resultType="java.util.HashMap"  parameterType="int">
+		SELECT o.*,c.icon,ct.tag_name,c.commodity_name as commodityName
+		FROM shop_order_details o
+		LEFT JOIN shop_commodity c ON c.commodity_id=o.commodity_id
+		LEFT JOIN shop_commodity_tag ct ON ct.tag_id=c.commodity_tag_id
+		WHERE o.order_id=#{orderId}
+	</select>
+	
+	
+	<select id="getDetailByOrderId" resultType="java.util.HashMap"  parameterType="int">
+		SELECT o.*,c.icon,ct.tag_name,c.commodity_name AS commodityName,c.material,c.commodity_price
+		FROM shop_order_details o
+		LEFT JOIN shop_commodity c ON c.commodity_id=o.commodity_id
+		LEFT JOIN shop_commodity_tag ct ON ct.tag_id=c.commodity_tag_id
+		WHERE o.order_id=#{orderId}
+	</select>
+	
+	<select id="getCommodityrentByOrderId" resultType="java.util.HashMap"  parameterType="int">
+		select commodityrent,order_id from shop_order_details where order_id=#{orderId}
+	</select>
+  	
+</mapper>   
