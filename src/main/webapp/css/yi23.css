@@ -1,0 +1,1073 @@
+* {
+	margin: 0;
+	padding: 0;
+	outline: none;
+	border: none;
+	box-sizing: border-box
+}
+
+ol,
+ul,
+li,
+dl {
+	list-style: none
+}
+
+body {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+}
+
+img {
+	width: 100%
+}
+
+i {
+	font-style: normal
+}
+
+.br {
+	height: 10px
+}
+
+*:before,
+*:after {
+	-webkit-box-sizing: border-box
+}
+
+form,
+select {
+	margin: 0
+}
+
+input {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: none
+}
+
+input:focus,
+textarea:focus {
+	outline: none
+}
+
+input:focus {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-user-modify: read-write-plaintext-only
+}
+
+input[type='number'] {
+	-moz-appearance: textfield
+}
+
+input[type='button'],
+input[type='reset'],
+input[type='submit'] {
+	-webkit-appearance: none
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none
+}
+
+input::-ms-clear {
+	display: none
+}
+
+.button {
+	border-radius: 0
+}
+
+textarea {
+	margin: 0;
+	padding: 0;
+	resize: none;
+	overflow: auto;
+	outline: none;
+	-webkit-appearance: none
+}
+
+td {
+	padding: 0
+}
+
+html,
+body {
+	min-height: 100%
+}
+
+.br {
+	height: 10px
+}
+
+.none {
+	display: none
+}
+
+.clear {
+	clear: both
+}
+
+.fl {
+	float: left
+}
+
+.fr {
+	float: right
+}
+
+.hide {
+	overflow: hidden;
+	display: block;
+	white-space: nowrap;
+	text-overflow: ellipsis
+}
+
+#wrapper {
+	width: 100%;
+	height: 50%;
+	position: relative;
+	left: 0;
+	overflow-y: hidden;
+	overflow-x: hidden
+}
+
+#carousel {
+	margin-top: 60px
+}
+
+#carousel div {
+	text-align: center;
+	width: 253px;
+	height: 384px;
+	float: left;
+	padding: 0 9px;
+	position: relative
+}
+
+#carousel div p {
+	text-align: left;
+	font-family: PingFangSC-Medium;
+	font-size: 12px;
+	padding-left: 5px
+}
+
+#carousel div img {
+	border: none;
+	background: #fff
+}
+
+.p1 {
+	padding: 20px 0 40px 0;
+	line-height: 0
+}
+
+.p2 {
+	padding: 54px 0 20px 0;
+	line-height: 0
+}
+
+#carousel div span {
+	display: none
+}
+
+#donate-spacer {
+	height: 100%
+}
+
+section.modalWindow,
+section.modalWindow1 {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	background: #fff;
+	width: 70%;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
+	z-index: 99999
+}
+
+section.modalWindow1 {
+	width: auto;
+	padding: 50px
+}
+
+.videoBg,
+.ycloset-top-ewm {
+	background: #fff;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px
+}
+
+.ycloset-top-ewm img {
+	width: 193px
+}
+
+.ycloset-top-ewm h2,
+.ycloset-top-ewm p {
+	font-size: 14px;
+	text-align: center
+}
+
+.ycloset-top-ewm h2 {
+	font-weight: normal;
+	font-style: normal;
+	color: #111;
+	margin: 10px 0 5px 0;
+	font-family: "PingFangSC-Regular"
+}
+
+.ycloset-top-ewm p {
+	font-family: "PingFangSC-Medium";
+	color: #CDAB6A
+}
+
+video {
+	width: 100%
+}
+
+.closeBtn {
+	position: absolute;
+	right: 17px;
+	top: 17px;
+	cursor: pointer
+}
+
+.closeBtn img {
+	width: 16px;
+	height: 16px
+}
+
+section.modal.overlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-height: 100%;
+	background: rgba(0, 0, 0, 0.4);
+	z-index: 9999;
+	cursor: pointer
+}
+
+@font-face {
+	font-family: Ubuntu-LightItalic;
+	src: url(../../font_family/Ubuntu-LightItalic.ttf)
+}
+
+body {
+	background: #fafafa
+}
+
+.ycloset {
+	max-width: 1280px;
+	min-width: 320px;
+	height: auto;
+	margin: 0 auto;
+	background: #fff
+}
+
+.ycloset a {
+	color: #111;
+	text-decoration: none
+}
+
+.ycloset-top {
+	border-top: 4px #111 solid;
+	background: #fff;
+	width: 100%;
+	padding: 21px 0
+}
+
+.ycloset-top-logo {
+	margin: 0 auto;
+	width: 140px
+}
+
+.ycloset-top-logo img {
+	width: 100%
+}
+
+.ycloset-top-nav {
+	width: auto;
+	height: 0;
+	position: relative;
+	float: right;
+	background: blue;
+	z-index: 999;
+	font-size: 13px;
+	padding-right: 30px
+}
+
+.ycloset-top-nav p {
+	top: -30px;
+	position: relative;
+	font-family: PingFangSC-Regular
+}
+
+.ycloset-top-nav p i {
+	width: 12px;
+	height: 11px;
+	float: left;
+	position: relative;
+	top: 5px;
+	margin-right: 5px
+}
+
+.ycloset-top-nav p i img {
+	width: 100%
+}
+
+.ycloset-banner {
+	float: left;
+	width: 100%;
+	height: auto;
+	padding: 15.5% 0 15% 0;
+	background: url(../../images/head.jpg) 0 0 no-repeat;
+	background-size: 100%
+}
+
+.ycloset-banner h2,
+.ycloset-banner h3,
+.ycloset-banner p {
+	text-align: center;
+	font-weight: normal;
+	font-style: normal
+}
+
+.ycloset-banner h2 {
+	font-size: 36px;
+	font-family: PingFangSC-Thin
+}
+
+.ycloset-banner h3 {
+	font-size: 32px;
+	line-height: 60px;
+	font-family: PingFangSC-Medium;
+	padding-left: 50px
+}
+
+.ycloset-banner h3 i {
+	position: relative;
+	top: -20px;
+	left: -7px;
+	font-size: 12px;
+	font-family: PingFang SC;
+	font-weight: 400;
+	background: #CDAB6A;
+	padding: 2px 5px;
+	color: #fff;
+	border-radius: 1px
+}
+
+.ycloset-banner p {
+	margin-top: 4%;
+	font-family: PingFangSC-Regular
+}
+
+.ycloset-banner p i {
+	position: relative;
+	top: 3px;
+	width: 17px;
+	height: 17px;
+	margin-right: 5px
+}
+
+.ycloset-banner p i img {
+	width: 17px;
+	height: 17px
+}
+
+.ycloset-one,
+.ycloset-three {
+	width: 100%;
+	float: left;
+	padding: 86px 0 100px 0
+}
+
+.ycloset-one-title,
+.ycloset-three-title {
+	float: left;
+	width: 100%;
+	margin-bottom: 60px
+}
+
+.ycloset-one-title h2,
+.ycloset-three-title h2,
+.ycloset-one-title p,
+.ycloset-three-title p {
+	text-align: center;
+	font-weight: normal;
+	font-style: normal;
+	letter-spacing: 3px;
+	font-family: PingFangSC-Regular
+}
+
+.ycloset-one-title h2,
+.ycloset-three-title h2 {
+	font-size: 32px;
+	color: #111
+}
+
+.ycloset-one-title p,
+.ycloset-three-title p {
+	font-size: 18px;
+	color: #CDAB6A;
+	margin-top: 5px;
+	font-family: Ubuntu-LightItalic
+}
+
+.ycloset-one-con,
+.ycloset-three-con {
+	overflow: hidden;
+	float: left;
+	width: 100%
+}
+
+.ycloset-one-con ul,
+.ycloset-three-con ul {
+	margin-right: -1px;
+	margin-bottom: 50px
+}
+
+.ycloset-one-con ul li,
+.ycloset-three-con ul li {
+	text-align: left;
+	width: 33.3333%;
+	padding: 0 8%;
+	background: url(../../images/black-border.svg) 100% 50% no-repeat;
+	background-size: 1px;
+	float: left;
+	text-align: center
+}
+
+.ycloset-one-con ul li img,
+.ycloset-three-con ul li img {
+	padding: 0 30%;
+	margin-bottom: 22px
+}
+
+.ycloset-one-con ul li h2,
+.ycloset-three-con ul li h2,
+.ycloset-one-con ul li p,
+.ycloset-three-con ul li p {
+	font-style: normal;
+	font-weight: normal
+}
+
+.ycloset-one-con ul li h2,
+.ycloset-three-con ul li h2 {
+	font-size: 16px;
+	margin-bottom: 10px;
+	font-family: PingFangSC-Medium
+}
+
+.ycloset-one-con ul li p,
+.ycloset-three-con ul li p {
+	font-size: 13px;
+	line-height: 21px;
+	font-family: PingFang SC;
+	font-weight: 300
+}
+
+.ycloset-two {
+	width: 100%;
+	float: left
+}
+
+.ycloset-two ul {
+	width: 100%
+}
+
+.ycloset-two ul li {
+	width: 25%;
+	float: left;
+	height: auto;
+	padding: 18% 0;
+	position: relative
+}
+
+.ycloset-two ul li .ycloset-two-list-con {
+	position: absolute;
+	margin: 0;
+	top: 56%;
+	width: 80%;
+	height: auto;
+	left: 50%;
+	display: block;
+	z-index: 9;
+	transform: translate(-50%, -50%)
+}
+
+.ycloset-two ul li .ycloset-two-list-con h2,
+.ycloset-two ul li .ycloset-two-list-con p {
+	text-align: center;
+	color: #fff;
+	font-style: normal;
+	font-weight: normal
+}
+
+.ycloset-two ul li .ycloset-two-list-con h2 {
+	line-height: 50px;
+	font-size: 18px;
+	font-family: PingFangSC-Regular;
+	letter-spacing: 5px
+}
+
+.ycloset-two ul li .ycloset-two-list-con p {
+	font-size: 14px;
+	height: 50px;
+	line-height: 21px;
+	font-family: PingFang SC;
+	letter-spacing: 1px;
+	font-weight: 300
+}
+
+.ycloset-two ul li img {
+	width: 100%
+}
+
+.ycloset-two ul .two-1 {
+	background: url(../../images/two-1.jpg) 0 100% no-repeat
+}
+
+.ycloset-two ul .two-2 {
+	background: url(../../images/two-2.jpg) 0 100% no-repeat
+}
+
+.ycloset-two ul .two-3 {
+	background: url(../../images/two-3.jpg) 0 100% no-repeat
+}
+
+.ycloset-two ul .two-4 {
+	background: url(../../images/two-4.jpg) 0 100% no-repeat
+}
+
+.ycloset-two ul .two-1,
+.ycloset-two ul .two-2,
+.ycloset-two ul .two-3,
+.ycloset-two ul .two-4 {
+	background-size: 100%
+}
+
+.ycloset-four {
+	width: 100%;
+	float: left;
+	padding: 125px 0;
+	background: url(../../images/four-1.jpg) 0 50% no-repeat;
+	background-size: 100%;
+	margin-bottom: 40px
+}
+
+.ycloset-four h2,
+.ycloset-four h3,
+.ycloset-four p {
+	text-align: center;
+	color: #fff;
+	font-weight: normal;
+	font-style: normal;
+	font-family: PingFang SC
+}
+
+.ycloset-four h2 {
+	font-size: 32px
+}
+
+.ycloset-four h3 {
+	font-size: 18px;
+	color: #CDAB6A;
+	margin-top: 10px;
+	letter-spacing: 3px;
+	font-family: Ubuntu-LightItalic
+}
+
+.ycloset-four p {
+	padding: 0 33%;
+	font-size: 14px;
+	margin-top: 37px;
+	line-height: 26px;
+	font-family: PingFang SC;
+	font-weight: 300
+}
+
+.ycloset-five {
+	width: 1080px;
+	margin: 0 auto;
+	height: 350px;
+	margin-top: 0;
+	background: #fff
+}
+
+.ycloset-five ul.ycloset-five-list {
+	margin-left: -2%
+}
+
+.ycloset-five ul.ycloset-five-list li {
+	width: 23%;
+	margin: 0 0 2.5% 2%;
+	float: left;
+	color: #222
+}
+
+.ycloset-five ul.ycloset-five-list li h2 {
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	font-family: PingFangSC-Medium;
+	line-height: 21px
+}
+
+.ycloset-five ul.ycloset-five-list li p {
+	font-size: 12px;
+	font-family: PingFangSC-Regular
+}
+
+.ycloset-five div {
+	font-size: 10px;
+	width: 100%;
+	float: left;
+	line-height: 66px;
+	margin-top: 20px;
+	margin-bottom: 150px;
+	border-top: 1px rgba(0, 0, 0, 0.1) solid;
+	text-align: center;
+	font-family: PingFangSC-Regular
+}
+
+.ycloset-six {
+	padding: 9% 0;
+	background: url(../../images/zmxy-banner.jpg) 50% 50% no-repeat;
+	background-size: 100%;
+	float: left;
+	width: 100%
+}
+
+.ycloset-six-hezuo {
+	width: 400px;
+	height: 50px;
+	color: #fff;
+	margin: 0 auto
+}
+
+.ycloset-six-hezuo-logo {
+	width: 160px;
+	height: 50px;
+	float: left;
+	background: url(../../images/ycloset-logo.svg) 50% 50% no-repeat;
+	background-size: 140px
+}
+
+.ycloset-six-hezuo-chenghao {
+	width: 94px;
+	height: 50px;
+	background: url(../../images/chenghao.svg) 50% 50% no-repeat;
+	background-size: 30px;
+	float: left
+}
+
+.ycloset-six-hezuo-zmxy {
+	width: 146px;
+	height: 50px;
+	float: right;
+	background: url(../../images/zmxy-logo.png) 50% 50% no-repeat;
+	background-size: 140px
+}
+
+.ycloset-six p {
+	float: left;
+	width: 100%;
+	text-align: center;
+	display: block;
+	font-size: 16px;
+	color: #fff;
+	margin-top: 28px;
+	font-family: PingFangSC-Regular
+}
+
+.cao {
+	position: fixed;
+	bottom: -300px
+}
+
+@media screen and (max-width: 1080px) {
+	.ycloset-top {
+		border-top: 4px #111 solid;
+		height: auto;
+		padding: 16px 0
+	}
+	.ycloset-top-logo {
+		width: 130px
+	}
+	.ycloset-top-logo img {
+		width: 100%
+	}
+	.ycloset .none1080 {
+		display: none
+	}
+	.ycloset-banner {
+		padding: 10% 0
+	}
+	.ycloset-one,
+	.ycloset-three {
+		width: 100%;
+		float: left;
+		padding: 86px 0 100px 0
+	}
+	.ycloset-one-title,
+	.ycloset-three-title {
+		float: left;
+		width: 100%;
+		margin-bottom: 60px
+	}
+	.ycloset-one-title h2,
+	.ycloset-three-title h2,
+	.ycloset-one-title p,
+	.ycloset-three-title p {
+		text-align: center;
+		font-weight: normal;
+		font-style: normal;
+		letter-spacing: 3px
+	}
+	.ycloset-one-title h2,
+	.ycloset-three-title h2 {
+		font-size: 32px;
+		color: #111
+	}
+	.ycloset-one-title p,
+	.ycloset-three-title p {
+		font-size: 18px;
+		color: #CDAB6A
+	}
+	.ycloset-one-con,
+	.ycloset-three-con {
+		overflow: hidden;
+		float: left;
+		width: 100%
+	}
+	.ycloset-one-con ul,
+	.ycloset-three-con ul {
+		margin-right: -1px;
+		margin-bottom: 50px
+	}
+	.ycloset-one-con ul li,
+	.ycloset-three-con ul li {
+		text-align: left;
+		width: 33.333%;
+		padding: 0 4%;
+		float: left;
+		text-align: center
+	}
+	.ycloset-one-con ul li img,
+	.ycloset-three-con ul li img {
+		padding: 0 30%;
+		margin-bottom: 22px
+	}
+	.ycloset-one-con ul li h2,
+	.ycloset-three-con ul li h2,
+	.ycloset-one-con ul li p,
+	.ycloset-three-con ul li p {
+		font-style: normal;
+		font-weight: normal
+	}
+	.ycloset-one-con ul li h2,
+	.ycloset-three-con ul li h2 {
+		font-size: 16px;
+		margin-bottom: 10px;
+		font-family: PingFangSC-Medium
+	}
+	.ycloset-one-con ul li p,
+	.ycloset-three-con ul li p {
+		font-size: 13px;
+		line-height: 21px;
+		font-family: PingFang SC
+	}
+	.ycloset-two ul li {
+		width: 50%;
+		padding: 36% 0
+	}
+	.ycloset-four {
+		background-size: 255%;
+		margin-bottom: 0
+	}
+	.ycloset-four h2 {
+		font-size: 24px
+	}
+	.ycloset-four h3 {
+		font-size: 14px
+	}
+	.ycloset-four p {
+		padding: 0 10%
+	}
+	.ycloset-five {
+		width: 720px
+	}
+	.ycloset-six {
+		padding: 9.5% 0;
+		background-size: 115%
+	}
+	.down-app {
+		width: 100%;
+		position: fixed;
+		background: rgba(0, 0, 0, 0.7);
+		left: 0;
+		bottom: 0;
+		height: 54px;
+		line-height: 54px;
+		text-align: center;
+		color: #fff;
+		font-weight: normal;
+		z-index: 99
+	}
+	.down-app-l {
+		width: 100%;
+		float: left;
+		height: 50px
+	}
+	.down-app-l .aimg {
+		position: absolute;
+		left: 33px;
+		top: 7px;
+		width: 40px;
+		height: 40px;
+		background: url(../../images/down-icon.png) 50% 50% no-repeat;
+		background-size: 100%
+	}
+	.down-app-l .aimg .down-close {
+		position: absolute;
+		left: -26px;
+		width: 20px;
+		top: 10px;
+		-moz-border-radius: 50% 50% 50% 50%;
+		-webkit-border-radius: 50% 50% 50% 50%;
+		border-radius: 50% 50% 50% 50%;
+		height: 20px;
+		line-height: 20px;
+		background: url(../../images/close-bottom.png) 0 50% no-repeat;
+		background-size: 100%;
+		cursor: default
+	}
+	.down-app-l h6,
+	.down-app-l h7 {
+		float: left;
+		width: 100%;
+		height: 21px;
+		padding-left: 82px;
+		line-height: 19px;
+		text-align: left;
+		color: #fff
+	}
+	.down-app-l h6 {
+		font-size: 14px;
+		margin-top: 8px
+	}
+	.down-app-l h7 {
+		font-size: 10px
+	}
+	.down-app-r {
+		float: right;
+		width: 78px;
+		height: 55px;
+		position: relative;
+		top: -50px;
+		right: 10px
+	}
+	.down-app-r ul li {
+		float: left;
+		width: 100%;
+		margin-right: 5px
+	}
+	.down-app-r ul li button {
+		border: 1px rgba(0, 0, 0, 0.9) solid;
+		height: 28px;
+		width: 100%;
+		margin-top: 12px;
+		color: #fff;
+		height: 30px;
+		line-height: 30px;
+		float: left;
+		background: #FF544B;
+		border: none;
+		-moz-border-radius: 3px 3px 3px 3px;
+		-webkit-border-radius: 3px 3px 3px 3px;
+		border-radius: 3px 3px 3px 3px;
+		font-family: "PingFangSC-Light"
+	}
+	.cao {
+		position: fixed;
+		bottom: 0
+	}
+}
+
+@media screen and (max-width:710px) {
+	.ycloset-top {
+		border-top: 4px #111 solid;
+		padding: 16px 0
+	}
+	.ycloset .none1080,
+	.ycloset .none710 {
+		display: none
+	}
+	.ycloset-banner {
+		position: relative;
+		overflow-y: hidden;
+		width: 100%;
+		height: auto;
+		padding: 44% 0;
+		background: url(../../images/head2.jpg) 0 50% no-repeat;
+		background-size: 100%
+	}
+	.ycloset-one,
+	.ycloset-three {
+		padding: 36px 0 0 0
+	}
+	.ycloset-one-title,
+	.ycloset-three-title {
+		margin-bottom: 0
+	}
+	.ycloset-one-title h2,
+	.ycloset-three-title h2 {
+		font-size: 24px
+	}
+	.ycloset-one-title p,
+	.ycloset-three-title p {
+		font-size: 14px
+	}
+	.ycloset-one-con ul,
+	.ycloset-three-con ul {
+		margin-right: 0;
+		margin-bottom: -1px;
+		padding: 0 20%
+	}
+	.ycloset-one-con ul li,
+	.ycloset-three-con ul li {
+		width: 100%;
+		padding: 40px 0;
+		border-right: none;
+		border-bottom: .5px #000 solid;
+		background: none
+	}
+	.ycloset-one-con ul li img,
+	.ycloset-three-con ul li img {
+		margin-bottom: 22px
+	}
+	.ycloset-one-con .eee,
+	.ycloset-three-con .eee {
+		border: none
+	}
+	.ycloset-two ul li {
+		width: 100%;
+		padding: 130px 0
+	}
+	.ycloset-two ul .two-1 {
+		background: url(../../images/two-1.jpg) 0 50% no-repeat
+	}
+	.ycloset-two ul .two-2 {
+		background: url(../../images/two-2.jpg) 0 50% no-repeat
+	}
+	.ycloset-two ul .two-3 {
+		background: url(../../images/two-3.jpg) 0 50% no-repeat
+	}
+	.ycloset-two ul .two-4 {
+		background: url(../../images/two-4.jpg) 0 50% no-repeat
+	}
+	.ycloset-two ul .two-1,
+	.ycloset-two ul .two-2,
+	.ycloset-two ul .two-3,
+	.ycloset-two ul .two-4 {
+		background-size: 100%
+	}
+	.ycloset-three {
+		padding: 36px 0 50px 0
+	}
+	.ycloset-three-title {
+		margin-bottom: 30px
+	}
+	.ycloset-four {
+		padding: 62px 0;
+		background: url(../../images/four-1.jpg) 0 50% no-repeat;
+		background-size: 255%;
+		margin-bottom: 0
+	}
+	.ycloset-four h2 {
+		font-size: 24px
+	}
+	.ycloset-four h3 {
+		font-size: 14px
+	}
+	.ycloset-four p {
+		padding: 0 10%
+	}
+	.ycloset-six {
+		padding: 23% 0;
+		background: url(../../images/zmxy-banner_mobile.jpg) 50% 50% no-repeat;
+		background-size: 100%;
+		float: left;
+		width: 100%
+	}
+	.ycloset-six-hezuo {
+		width: 85%;
+		height: 50px;
+		color: #fff;
+		margin: 0 auto
+	}
+	.ycloset-six-hezuo-logo {
+		width: 100%;
+		height: 50px;
+		float: left;
+		background: url(../../images/ycloset-logo.svg) 50% 50% no-repeat;
+		background-size: 40%
+	}
+	.ycloset-six-hezuo-chenghao {
+		width: 100%;
+		height: 50px;
+		background: url(../../images/chenghao.svg) 50% 50% no-repeat;
+		background-size: 30px;
+		float: left
+	}
+	.ycloset-six-hezuo-zmxy {
+		width: 100%;
+		height: 50px;
+		float: right;
+		background: url(../../images/zmxy-logo.png) 50% 50% no-repeat;
+		background-size: 100px;
+		position: relative;
+		top: -10px
+	}
+	.ycloset-six p {
+		float: left;
+		width: 100%;
+		text-align: center;
+		display: block;
+		font-size: 16px;
+		color: #fff;
+		margin-top: 6%;
+		font-family: PingFangSC-Regular
+	}
+	.ycloset span {
+		width: 100%;
+		float: left;
+		height: 54px;
+		background: #000
+	}
+	.cao {
+		position: fixed;
+		bottom: 0
+	}
+}
+
+@media screen and (max-width:375px) {
+	.ycloset-four {
+		padding: 57px 0
+	}
+}
+
+@media screen and (max-width:320px) {
+	.ycloset-four {
+		background-size: 320%
+	}
+}

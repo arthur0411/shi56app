@@ -1,0 +1,417 @@
+*{
+	padding:0px;
+	margin: 0px;
+	font-size:0px;	
+}
+@media screen and (min-width: 1280px) {
+	body{
+		text-align: center;
+	}
+	.fly{
+		width:100%;
+		text-align: center;
+		position: fixed;
+		bottom: 0px;
+		
+	}
+	.fly .fly_content{
+		margin:0px auto;
+		height:200px;
+		width:1280px;
+		background: black;
+		position: relative;
+	}
+	.fly .fly_content .fly_youhui{
+		position: absolute;
+		top:60px;
+		left:60px;
+		color:#ffffff;
+		text-align: left;
+		float:left;
+		font-size:18px;
+		line-height:18px;
+	}
+	.fly .fly_content .fly_youhui p{
+		height: 26px;
+		font-size:18px;
+	}
+	.fly .fly_content .fly_youhui span{
+		font-size:18px;
+	}
+	.fly .fly_content .fly_guanzhu{
+		position: absolute;
+		width:0px;
+		right:204px;
+		top:32px;
+	}
+	.fly .fly_content .fly_xiazai{
+		position: absolute;
+		width:0px;
+		right:374px;
+		top:32px;
+	}
+	.fly .fly_content .fly img{
+		width:110px;
+		height:110px;
+		background: lightblue;
+	}
+	.fly .fly_content .fly span{
+		display: block;
+		text-align: left;
+		width:130px;
+		color:#ffffff;
+		font-size:16px;
+	}
+	.top{
+		margin:0px auto;
+		height:120px;
+		width:1280px;
+		z-index: 10;
+		text-align: center;
+		position: relative;
+	}
+	.top .top_line{
+		width:100%;
+		height:4px;
+		background: black;
+	}
+	.top .logo img{
+		margin-top:16px;
+		width:100px;
+		height:60px;
+		background: lightblue;
+	}
+	.top .menu{
+		position: absolute;
+		right:0px;
+		top:52px;
+		font-size:14px;
+	}
+	.top .menu div{
+		display: inline-block;
+		padding-right:40px;
+		font-size: 14px;
+	}
+	.top .menu div:first-child:before{
+		width:20px;
+		height:20px;
+		content:"　　";
+		background: url(../img/phone.png) no-repeat;
+	}
+	.center{
+		margin:0px auto;
+		width:1280px;
+		text-align: center;
+		position: relative;
+	}
+	.center .first{
+		height:600px;
+		width:1280px;
+	}
+	.center .second{	
+		width:1280px;
+		padding-top: 110px ;
+		padding-bottom: 50px;
+	}
+	.center .second span:first-child{
+		display: block;
+		font-family: simsun;
+		font-size:34px;
+		line-height: 34px;
+	
+		margin-bottom:18px;
+	}
+	.center .second span:nth-child(2){
+		display: block;
+		font-size:20px;
+		font-family: helvetica;
+		line-height: 20px;
+		font-style: italic;
+		color:#00afbc;
+		margin-bottom:18px;
+	}
+	.center .third >div{
+		display: inline-table;
+		width:33%;
+		text-align: center;
+	}
+	.center .third >div >div{
+		margin:0 auto;
+		text-align: center;
+		margin-bottom: 108px;
+	}
+	.center .third >div >div >img{
+		margin-bottom: 60px;
+	}
+	.center .third >div >div >span{
+		display: block;
+	}
+	.center .third >div >div >span:first-of-type{
+		font-size: 22px;
+		line-height: 22px;
+		margin-bottom: 22px;
+		font-family: "microsoft yahei";
+		color: #090909;
+	}
+	.center .third >div >div >span{
+		font-size: 20px;
+		line-height: 20px;
+		margin-bottom: 12px;
+		font-family: "microsoft yahei";
+		color: #333333;
+	}
+	.center .fourth{
+		height: 850px;
+	}
+	.center .fourth > div:nth-child(1){
+		height: 350px;
+	}
+	.center .fourth > div:nth-child(2){
+		height: 500px;
+	}
+	.center .fourth > div:nth-child(2) >div{
+		display: inline-block;
+	}
+	.center .fourth > div:nth-child(2) >div >img{
+		width:320px;
+		height: 500px;
+	}
+	.center .fifth {
+		width:1280px;
+		overflow: hidden;
+		margin-bottom: 110px;
+	}
+	.center .fifth_in {
+		width:5000px;
+	}
+	.center .fifth .fifth_in >div{
+		float: left;
+		margin-right:20px;
+		width:216px;
+		display: inline-table;
+	}
+	.center .sixth{
+		height:500px;
+		width: 1280px;
+	}
+	.bottom{
+		width:1280px;
+		margin: 0 auto;
+		margin-bottom: 200px;
+		padding:60px 4% 0px 4%;
+		box-sizing: border-box;
+	}
+	.bottom >div{
+		width:100%;
+		height:180px;
+	}
+	.bottom >div >div{
+		float: left;
+		text-align: left;
+		display: inline-table;
+		font-size:14px;
+		color: #333333;
+		width:24%;
+		margin-bottom: 44px;
+	}
+	.bottom .copyright{
+		display: block;
+		padding:26px 0px;
+		font-size:14px;
+		color: #333333;
+	}
+	.fly2{
+		display: none;
+	}
+}
+@media screen and (max-width: 1279px) {
+	body{
+		width:100%;
+		overflow-x: hidden;
+	}
+
+	.top{
+		width:100%;
+		z-index: 10;
+		text-align: center;
+		position: relative;
+	}
+	.top .top_line{
+		width:100%;
+		height:4px;
+		background: black;
+	}
+	.top .logo img{
+		margin-top:16px;
+		height:50px;
+		background: lightblue;
+		margin-bottom: 6px;
+	}
+	.top .menu{
+		display: none;
+	}
+	.center{
+		margin:0px auto;
+		width:100%;
+		text-align: center;
+		position: relative;
+		overflow: hidden;
+	}
+	.center >div{
+		width:100%;
+	}
+	.center .first img{
+		width:140% !important;
+		margin-left:-20%;
+	}
+	.center .second{	
+		width:100%;
+		padding-top: 30px ;
+		padding-bottom: 20px;
+	}
+	.center .second span:first-child{
+		display: block;
+		font-family: simsun;
+		font-size:30px;
+		line-height: 30px;
+		margin-bottom:14px;
+	}
+	.center .second span:nth-child(2){
+		display: block;
+		font-size:18px;
+		font-family: helvetica;
+		line-height: 18px;
+		font-style: italic;
+		color:#00afbc;
+		margin-bottom:14px;
+	}
+	.center .third >div{
+		width:100%;
+		text-align: center;
+		margin-bottom: 12px;
+		margin-top: 12px;
+		
+	}
+	.center .third >div >div{
+		margin:0 10%;
+		text-align: center;
+		border-bottom: 1px solid lightgray;
+	}
+	.center .third >div >div.last{
+		border-bottom: 0px;
+	}
+	.center .third >div >div >img{
+		margin-bottom: 30px;
+	}
+	.center .third >div >div >span{
+		display: block;
+	}
+	.center .third >div >div >span:first-of-type{
+		font-size: 20px;
+		line-height: 20px;
+		margin-bottom: 22px;
+		font-family: "microsoft yahei";
+		color: #090909;
+	}
+	
+	.center .third >div >div >span{
+		font-size: 16px;
+		line-height: 16px;
+		margin-bottom: 12px;
+		font-family: "microsoft yahei";
+		color: #333333;
+	}
+	.center .fourth > div:nth-child(1) >img{
+		width:160%;
+		margin-left:-30%;
+		z-index: 10;
+	}
+	.center .fourth > div:nth-child(2){
+		overflow: hidden;
+	}
+	.center .fourth > div:nth-child(2) >div{
+		overflow: hidden;
+	}
+	.center .fourth > div:nth-child(2) >div >img{
+		/*margin-top:-40%;*/
+	}
+	.center .fifth{
+		width:100%;
+		overflow: hidden;
+	}
+	.center .fifth .fifth_in {
+		width:900%;
+		overflow: hidden;
+		float: left;
+		text-align: left;
+	}
+	.center .fifth .fifth_in >div{
+		float: left;
+		display: inline-table;
+		margin-right: 1%;
+		width:5%;
+	}
+	.center .fifth .fifth_in >div >img{
+		width:100%;
+	}
+	.center .sixth{
+		overflow: hidden;
+	}
+	.center .sixth >img{
+		margin-top:20px;
+		width:180%;
+		margin-left:-40%;
+	}
+	.fly{
+		display: none;
+	}
+	.fly2{
+		position: fixed;
+		height:54px;
+		width: 100%;
+		bottom:0px;
+		background: rgba(0,0,0,0.6);
+	}
+	.fly2 .fly_content2{
+		
+		position: relative;
+	}
+	.fly2 .fly_content2 .fly_littlelogo2{
+		position: absolute;
+		left:10px;
+		top:8px;
+		height:48px;
+		overflow: hidden;
+		width:24px;
+	}
+	.fly2 .fly_content2 .fly_littlelogo2 img{
+		height:36px;
+	}
+	.fly2 .fly_content2 .fly_logo2{
+		height:40px;
+		position: absolute;
+		left :42px;
+		top:7px;
+	}
+	.fly2 .fly_content2 >div >p{
+		font-size: 12px;
+		color:white;
+	}
+	.fly2 .fly_content2 .fly_xiazai2{
+		height:54px;
+		position: absolute;
+		right:10px;
+	}
+	.fly2 .fly_content2 .fly_xiazai2 >button{
+		margin-top:12px;
+		font-size:14px;
+		line-height: 30px;
+		height:30px;
+		width:78px;
+		background: rgb(255, 84, 75);
+		border:0px;
+		color:white;
+		border-radius: 5%;
+	}
+}
+

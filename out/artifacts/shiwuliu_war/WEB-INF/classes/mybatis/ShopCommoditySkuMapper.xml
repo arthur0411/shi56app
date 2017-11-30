@@ -97,8 +97,8 @@
   </sql>
  
   
-  	<select id="list" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-		SELECT * FROM shop_commodity_sku  where commodity_id = #{commodityId}
+  	<select id="list" resultType="java.util.HashMap" parameterType="java.lang.Integer">
+		SELECT sku_id,commodity_id,rent_stock,commoditySize,color,img FROM shop_commodity_sku  where commodity_id = #{commodityId}
 	</select>
   
   	<insert id="add" parameterType="Object" >

@@ -222,7 +222,7 @@ public class ShopCommodityAppController {
 	 * 商品搜索接口
 	 * 
 	 */
-	@RequestMapping(value = "/getSearchCommodity")
+	/*@RequestMapping(value = "/getSearchCommodity")
 	public void getSearchCommodity(@RequestParam String keyword, Integer userId, @RequestParam Integer currentPage,
 			HttpServletResponse response) {
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
@@ -257,7 +257,7 @@ public class ShopCommodityAppController {
 			}
 		}
 	}
-
+*/
 	/**
 	 * 获取选饰品 品牌推荐
 	 */

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.flf.controller.ShopSpecialTopicController;
 import com.flf.service.ShopSpecialTopicService;
 import com.flf.util.JSONUtils;
 
@@ -27,7 +26,7 @@ import com.flf.util.JSONUtils;
 @RequestMapping(value = "/shopSpecialTopicApp")
 public class ShopSpecialTopicAppController {
 
-	private final static Logger log = Logger.getLogger(ShopSpecialTopicController.class);
+	private final static Logger log = Logger.getLogger(ShopSpecialTopicAppController.class);
 	@Autowired(required = false)
 	private ShopSpecialTopicService shopSpecialTopicService;
 
